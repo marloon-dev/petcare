@@ -1,0 +1,355 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="1360" viewBox="0 0 1360 1360" font-family="Helvetica, Arial, sans-serif">
+<rect width="1360" height="1360" fill="#ffffff"/>
+<g transform="translate(0,115)">
+
+<defs>
+  <marker id="one" viewBox="-26 -10 28 20" refX="0" refY="0" markerWidth="28" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+    <path d="M-8 -8 V8 M-14 -8 V8" stroke="#3a3a3a" stroke-width="1.6" fill="none"/>
+  </marker>
+  <marker id="many1" viewBox="-26 -10 28 20" refX="0" refY="0" markerWidth="28" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+    <path d="M-14 0 L0 -8 M-14 0 L0 0 M-14 0 L0 8 M-19 -8 V8" stroke="#3a3a3a" stroke-width="1.6" fill="none"/>
+  </marker>
+  <marker id="many0" viewBox="-30 -10 32 20" refX="0" refY="0" markerWidth="32" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+    <path d="M-14 0 L0 -8 M-14 0 L0 0 M-14 0 L0 8" stroke="#3a3a3a" stroke-width="1.6" fill="none"/>
+    <circle cx="-21" cy="0" r="5" fill="#ffffff" stroke="#3a3a3a" stroke-width="1.6"/>
+  </marker>
+  <marker id="opt" viewBox="-30 -10 32 20" refX="0" refY="0" markerWidth="32" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+    <path d="M-8 -8 V8" stroke="#3a3a3a" stroke-width="1.6" fill="none"/>
+    <circle cx="-18" cy="0" r="5" fill="#ffffff" stroke="#3a3a3a" stroke-width="1.6"/>
+  </marker>
+</defs>
+<text x="60" y="44" font-size="22" font-weight="700" fill="#1f3a5f">PetCare – Diagrama Entidade-Relacionamento (versão inicial)</text>
+<text x="60" y="64" font-size="13" fill="#55606e">Sistema de Gestão para Clínica Veterinária · modelo lógico</text>
+<path d="M220 390 L220 480" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#one)" marker-end="url(#many1)"/>
+<rect x="228" y="427" width="53.2" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="233" y="440" font-size="12" font-style="italic" fill="#8a4b0f">possui</text>
+<text x="232" y="412" font-size="12" font-weight="700" fill="#b0261c">(1,1)</text>
+<text x="232" y="472" font-size="12" font-weight="700" fill="#b0261c">(1,N)</text>
+<path d="M380 510 L440 510 L440 440 L520 440" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#one)" marker-end="url(#many0)"/>
+<rect x="442" y="465" width="53.2" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="447" y="478" font-size="12" font-style="italic" fill="#8a4b0f">recebe</text>
+<text x="388" y="503" font-size="12" font-weight="700" fill="#b0261c">(1,1)</text>
+<text x="468" y="433" font-size="12" font-weight="700" fill="#b0261c">(0,N)</text>
+<path d="M380 640 L520 640" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#one)" marker-end="url(#many0)"/>
+<rect x="420" y="617" width="53.2" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="425" y="630" font-size="12" font-style="italic" fill="#8a4b0f">agenda</text>
+<text x="388" y="657" font-size="12" font-weight="700" fill="#b0261c">(1,1)</text>
+<text x="474" y="657" font-size="12" font-weight="700" fill="#b0261c">(0,N)</text>
+<path d="M380 688 L470 688 L470 900 L520 900" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#one)" marker-end="url(#many0)"/>
+<rect x="472" y="777" width="82.0" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="477" y="790" font-size="12" font-style="italic" fill="#8a4b0f">é atendido</text>
+<text x="388" y="682" font-size="12" font-weight="700" fill="#b0261c">(1,1)</text>
+<text x="474" y="893" font-size="12" font-weight="700" fill="#b0261c">(0,N)</text>
+<path d="M980 590 L910 590 L910 440 L840 440" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#one)" marker-end="url(#many0)"/>
+<rect x="912" y="507" width="53.2" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="917" y="520" font-size="12" font-style="italic" fill="#8a4b0f">aplica</text>
+<text x="930" y="583" font-size="12" font-weight="700" fill="#b0261c">(1,1)</text>
+<text x="848" y="433" font-size="12" font-weight="700" fill="#b0261c">(0,N)</text>
+<path d="M980 650 L840 650" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#one)" marker-end="url(#many0)"/>
+<rect x="876" y="661" width="60.4" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="881" y="674" font-size="12" font-style="italic" fill="#8a4b0f">realiza</text>
+<text x="930" y="643" font-size="12" font-weight="700" fill="#b0261c">(1,1)</text>
+<text x="848" y="643" font-size="12" font-weight="700" fill="#b0261c">(0,N)</text>
+<path d="M980 700 L900 700 L900 880 L840 880" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#one)" marker-end="url(#many0)"/>
+<rect x="902" y="777" width="53.2" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="907" y="790" font-size="12" font-style="italic" fill="#8a4b0f">atende</text>
+<text x="930" y="693" font-size="12" font-weight="700" fill="#b0261c">(1,1)</text>
+<text x="848" y="873" font-size="12" font-weight="700" fill="#b0261c">(0,N)</text>
+<path d="M680 755 L680 830" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#opt)" marker-end="url(#opt)"/>
+<rect x="688" y="785" width="38.8" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="693" y="798" font-size="12" font-style="italic" fill="#8a4b0f">gera</text>
+<text x="692" y="776" font-size="12" font-weight="700" fill="#b0261c">(0,1)</text>
+<text x="692" y="822" font-size="12" font-weight="700" fill="#b0261c">(0,1)</text>
+<path d="M680 229 L680 300" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#one)" marker-end="url(#many0)"/>
+<rect x="688" y="259" width="103.60000000000001" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="693" y="272" font-size="12" font-style="italic" fill="#8a4b0f">é aplicada em</text>
+<text x="692" y="250" font-size="12" font-weight="700" fill="#b0261c">(1,1)</text>
+<text x="692" y="294" font-size="12" font-weight="700" fill="#b0261c">(0,N)</text>
+<path d="M840 1000 L980 1000" fill="none" stroke="#3a3a3a" stroke-width="1.6" marker-start="url(#one)" marker-end="url(#many0)"/>
+<rect x="878" y="1011" width="53.2" height="18" rx="9" fill="#fdf1e3" stroke="#d9822b" stroke-width="1"/>
+<text x="883" y="1024" font-size="12" font-style="italic" fill="#8a4b0f">contém</text>
+<text x="848" y="993" font-size="12" font-weight="700" fill="#b0261c">(1,1)</text>
+<text x="930" y="993" font-size="12" font-weight="700" fill="#b0261c">(0,N)</text>
+<g>
+<rect x="60" y="80" width="320" height="310" rx="6" fill="#ffffff" stroke="#1f3a5f" stroke-width="1.6"/>
+<path d="M60 114 V86 a6 6 0 0 1 6 -6 H374 a6 6 0 0 1 6 6 V114 Z" fill="#1f3a5f"/>
+<text x="220.0" y="102" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">TUTOR</text>
+<rect x="61" y="114" width="318" height="23" fill="#fff4cc"/>
+<text x="70" y="130" font-size="11" font-weight="700" fill="#5a6b80">PK</text>
+<text x="98" y="130" font-size="13" font-weight="700" fill="#1b1b1b" text-decoration="underline" xml:space="preserve">id_tutor</text>
+<text x="266" y="130" font-size="12" fill="#55606e">INT</text>
+<line x1="60" y1="137" x2="380" y2="137" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="153" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">nome</text>
+<text x="266" y="153" font-size="12" fill="#55606e">VARCHAR(100)</text>
+<line x1="60" y1="160" x2="380" y2="160" stroke="#d9dee5" stroke-width="1"/>
+<text x="70" y="176" font-size="11" font-weight="700" fill="#5a6b80">UK</text>
+<text x="98" y="176" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">cpf</text>
+<text x="266" y="176" font-size="12" fill="#55606e">CHAR(11)</text>
+<line x1="60" y1="183" x2="380" y2="183" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="199" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">email</text>
+<text x="266" y="199" font-size="12" fill="#55606e">VARCHAR(100)</text>
+<line x1="60" y1="206" x2="380" y2="206" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="222" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">telefones (multivalorado)</text>
+<text x="266" y="222" font-size="12" fill="#55606e">VARCHAR(15) [N]</text>
+<line x1="60" y1="229" x2="380" y2="229" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="245" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">endereco (composto)</text>
+<text x="266" y="245" font-size="12" fill="#55606e"></text>
+<line x1="60" y1="252" x2="380" y2="252" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="268" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">   └ logradouro</text>
+<text x="266" y="268" font-size="12" fill="#55606e">VARCHAR(120)</text>
+<line x1="60" y1="275" x2="380" y2="275" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="291" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">   └ numero</text>
+<text x="266" y="291" font-size="12" fill="#55606e">VARCHAR(10)</text>
+<line x1="60" y1="298" x2="380" y2="298" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="314" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">   └ bairro</text>
+<text x="266" y="314" font-size="12" fill="#55606e">VARCHAR(60)</text>
+<line x1="60" y1="321" x2="380" y2="321" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="337" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">   └ cidade</text>
+<text x="266" y="337" font-size="12" fill="#55606e">VARCHAR(60)</text>
+<line x1="60" y1="344" x2="380" y2="344" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="360" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">   └ uf</text>
+<text x="266" y="360" font-size="12" fill="#55606e">CHAR(2)</text>
+<line x1="60" y1="367" x2="380" y2="367" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="383" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">   └ cep</text>
+<text x="266" y="383" font-size="12" fill="#55606e">CHAR(8)</text>
+<line x1="92" y1="114" x2="92" y2="390" stroke="#d9dee5" stroke-width="1"/>
+</g>
+<g>
+<rect x="60" y="480" width="320" height="218" rx="6" fill="#ffffff" stroke="#1f3a5f" stroke-width="1.6"/>
+<path d="M60 514 V486 a6 6 0 0 1 6 -6 H374 a6 6 0 0 1 6 6 V514 Z" fill="#1f3a5f"/>
+<text x="220.0" y="502" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">ANIMAL</text>
+<rect x="61" y="514" width="318" height="23" fill="#fff4cc"/>
+<text x="70" y="530" font-size="11" font-weight="700" fill="#5a6b80">PK</text>
+<text x="98" y="530" font-size="13" font-weight="700" fill="#1b1b1b" text-decoration="underline" xml:space="preserve">id_animal</text>
+<text x="266" y="530" font-size="12" fill="#55606e">INT</text>
+<line x1="60" y1="537" x2="380" y2="537" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="553" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">nome</text>
+<text x="266" y="553" font-size="12" fill="#55606e">VARCHAR(60)</text>
+<line x1="60" y1="560" x2="380" y2="560" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="576" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">especie</text>
+<text x="266" y="576" font-size="12" fill="#55606e">VARCHAR(30)</text>
+<line x1="60" y1="583" x2="380" y2="583" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="599" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">raca</text>
+<text x="266" y="599" font-size="12" fill="#55606e">VARCHAR(50)</text>
+<line x1="60" y1="606" x2="380" y2="606" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="622" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">sexo</text>
+<text x="266" y="622" font-size="12" fill="#55606e">CHAR(1)</text>
+<line x1="60" y1="629" x2="380" y2="629" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="645" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">data_nascimento</text>
+<text x="266" y="645" font-size="12" fill="#55606e">DATE</text>
+<line x1="60" y1="652" x2="380" y2="652" stroke="#d9dee5" stroke-width="1"/>
+<text x="98" y="668" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">peso</text>
+<text x="266" y="668" font-size="12" fill="#55606e">DECIMAL(5,2)</text>
+<rect x="61" y="675" width="318" height="23" fill="#e6f0fa"/>
+<line x1="60" y1="675" x2="380" y2="675" stroke="#d9dee5" stroke-width="1"/>
+<text x="70" y="691" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="98" y="691" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_tutor</text>
+<text x="266" y="691" font-size="12" fill="#55606e">INT</text>
+<line x1="92" y1="514" x2="92" y2="698" stroke="#d9dee5" stroke-width="1"/>
+</g>
+<g>
+<rect x="520" y="80" width="320" height="149" rx="6" fill="#ffffff" stroke="#1f3a5f" stroke-width="1.6"/>
+<path d="M520 114 V86 a6 6 0 0 1 6 -6 H834 a6 6 0 0 1 6 6 V114 Z" fill="#1f3a5f"/>
+<text x="680.0" y="102" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">VACINA</text>
+<rect x="521" y="114" width="318" height="23" fill="#fff4cc"/>
+<text x="530" y="130" font-size="11" font-weight="700" fill="#5a6b80">PK</text>
+<text x="558" y="130" font-size="13" font-weight="700" fill="#1b1b1b" text-decoration="underline" xml:space="preserve">id_vacina</text>
+<text x="726" y="130" font-size="12" fill="#55606e">INT</text>
+<line x1="520" y1="137" x2="840" y2="137" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="153" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">nome</text>
+<text x="726" y="153" font-size="12" fill="#55606e">VARCHAR(80)</text>
+<line x1="520" y1="160" x2="840" y2="160" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="176" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">fabricante</text>
+<text x="726" y="176" font-size="12" fill="#55606e">VARCHAR(80)</text>
+<line x1="520" y1="183" x2="840" y2="183" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="199" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">especie_indicada</text>
+<text x="726" y="199" font-size="12" fill="#55606e">VARCHAR(30)</text>
+<line x1="520" y1="206" x2="840" y2="206" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="222" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">intervalo_reforco_dias</text>
+<text x="726" y="222" font-size="12" fill="#55606e">INT</text>
+<line x1="552" y1="114" x2="552" y2="229" stroke="#d9dee5" stroke-width="1"/>
+</g>
+<g>
+<rect x="520" y="300" width="320" height="195" rx="6" fill="#ffffff" stroke="#1f3a5f" stroke-width="1.6"/>
+<path d="M520 334 V306 a6 6 0 0 1 6 -6 H834 a6 6 0 0 1 6 6 V334 Z" fill="#1f3a5f"/>
+<text x="680.0" y="322" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">APLICACAO_VACINA</text>
+<rect x="521" y="334" width="318" height="23" fill="#fff4cc"/>
+<text x="530" y="350" font-size="11" font-weight="700" fill="#5a6b80">PK</text>
+<text x="558" y="350" font-size="13" font-weight="700" fill="#1b1b1b" text-decoration="underline" xml:space="preserve">id_aplicacao</text>
+<text x="726" y="350" font-size="12" fill="#55606e">INT</text>
+<line x1="520" y1="357" x2="840" y2="357" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="373" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">data_aplicacao</text>
+<text x="726" y="373" font-size="12" fill="#55606e">DATE</text>
+<line x1="520" y1="380" x2="840" y2="380" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="396" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">lote</text>
+<text x="726" y="396" font-size="12" fill="#55606e">VARCHAR(30)</text>
+<line x1="520" y1="403" x2="840" y2="403" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="419" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">data_proxima_dose</text>
+<text x="726" y="419" font-size="12" fill="#55606e">DATE</text>
+<rect x="521" y="426" width="318" height="23" fill="#e6f0fa"/>
+<line x1="520" y1="426" x2="840" y2="426" stroke="#d9dee5" stroke-width="1"/>
+<text x="530" y="442" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="558" y="442" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_animal</text>
+<text x="726" y="442" font-size="12" fill="#55606e">INT</text>
+<rect x="521" y="449" width="318" height="23" fill="#e6f0fa"/>
+<line x1="520" y1="449" x2="840" y2="449" stroke="#d9dee5" stroke-width="1"/>
+<text x="530" y="465" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="558" y="465" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_vacina</text>
+<text x="726" y="465" font-size="12" fill="#55606e">INT</text>
+<rect x="521" y="472" width="318" height="23" fill="#e6f0fa"/>
+<line x1="520" y1="472" x2="840" y2="472" stroke="#d9dee5" stroke-width="1"/>
+<text x="530" y="488" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="558" y="488" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_veterinario</text>
+<text x="726" y="488" font-size="12" fill="#55606e">INT</text>
+<line x1="552" y1="334" x2="552" y2="495" stroke="#d9dee5" stroke-width="1"/>
+</g>
+<g>
+<rect x="520" y="560" width="320" height="195" rx="6" fill="#ffffff" stroke="#1f3a5f" stroke-width="1.6"/>
+<path d="M520 594 V566 a6 6 0 0 1 6 -6 H834 a6 6 0 0 1 6 6 V594 Z" fill="#1f3a5f"/>
+<text x="680.0" y="582" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">AGENDAMENTO</text>
+<rect x="521" y="594" width="318" height="23" fill="#fff4cc"/>
+<text x="530" y="610" font-size="11" font-weight="700" fill="#5a6b80">PK</text>
+<text x="558" y="610" font-size="13" font-weight="700" fill="#1b1b1b" text-decoration="underline" xml:space="preserve">id_agendamento</text>
+<text x="726" y="610" font-size="12" fill="#55606e">INT</text>
+<line x1="520" y1="617" x2="840" y2="617" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="633" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">data_hora</text>
+<text x="726" y="633" font-size="12" fill="#55606e">DATETIME</text>
+<line x1="520" y1="640" x2="840" y2="640" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="656" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">tipo_atendimento</text>
+<text x="726" y="656" font-size="12" fill="#55606e">VARCHAR(30)</text>
+<line x1="520" y1="663" x2="840" y2="663" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="679" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">status</text>
+<text x="726" y="679" font-size="12" fill="#55606e">VARCHAR(15)</text>
+<line x1="520" y1="686" x2="840" y2="686" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="702" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">observacoes</text>
+<text x="726" y="702" font-size="12" fill="#55606e">TEXT</text>
+<rect x="521" y="709" width="318" height="23" fill="#e6f0fa"/>
+<line x1="520" y1="709" x2="840" y2="709" stroke="#d9dee5" stroke-width="1"/>
+<text x="530" y="725" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="558" y="725" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_animal</text>
+<text x="726" y="725" font-size="12" fill="#55606e">INT</text>
+<rect x="521" y="732" width="318" height="23" fill="#e6f0fa"/>
+<line x1="520" y1="732" x2="840" y2="732" stroke="#d9dee5" stroke-width="1"/>
+<text x="530" y="748" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="558" y="748" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_veterinario</text>
+<text x="726" y="748" font-size="12" fill="#55606e">INT</text>
+<line x1="552" y1="594" x2="552" y2="755" stroke="#d9dee5" stroke-width="1"/>
+</g>
+<g>
+<rect x="520" y="830" width="320" height="264" rx="6" fill="#ffffff" stroke="#1f3a5f" stroke-width="1.6"/>
+<path d="M520 864 V836 a6 6 0 0 1 6 -6 H834 a6 6 0 0 1 6 6 V864 Z" fill="#1f3a5f"/>
+<text x="680.0" y="852" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">ATENDIMENTO</text>
+<rect x="521" y="864" width="318" height="23" fill="#fff4cc"/>
+<text x="530" y="880" font-size="11" font-weight="700" fill="#5a6b80">PK</text>
+<text x="558" y="880" font-size="13" font-weight="700" fill="#1b1b1b" text-decoration="underline" xml:space="preserve">id_atendimento</text>
+<text x="726" y="880" font-size="12" fill="#55606e">INT</text>
+<line x1="520" y1="887" x2="840" y2="887" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="903" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">data_hora</text>
+<text x="726" y="903" font-size="12" fill="#55606e">DATETIME</text>
+<line x1="520" y1="910" x2="840" y2="910" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="926" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">queixa</text>
+<text x="726" y="926" font-size="12" fill="#55606e">TEXT</text>
+<line x1="520" y1="933" x2="840" y2="933" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="949" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">peso_aferido</text>
+<text x="726" y="949" font-size="12" fill="#55606e">DECIMAL(5,2)</text>
+<line x1="520" y1="956" x2="840" y2="956" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="972" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">diagnostico</text>
+<text x="726" y="972" font-size="12" fill="#55606e">TEXT</text>
+<line x1="520" y1="979" x2="840" y2="979" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="995" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">tratamento</text>
+<text x="726" y="995" font-size="12" fill="#55606e">TEXT</text>
+<line x1="520" y1="1002" x2="840" y2="1002" stroke="#d9dee5" stroke-width="1"/>
+<text x="558" y="1018" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">observacoes</text>
+<text x="726" y="1018" font-size="12" fill="#55606e">TEXT</text>
+<rect x="521" y="1025" width="318" height="23" fill="#e6f0fa"/>
+<line x1="520" y1="1025" x2="840" y2="1025" stroke="#d9dee5" stroke-width="1"/>
+<text x="530" y="1041" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="558" y="1041" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_agendamento</text>
+<text x="726" y="1041" font-size="12" fill="#55606e">INT (opcional)</text>
+<rect x="521" y="1048" width="318" height="23" fill="#e6f0fa"/>
+<line x1="520" y1="1048" x2="840" y2="1048" stroke="#d9dee5" stroke-width="1"/>
+<text x="530" y="1064" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="558" y="1064" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_animal</text>
+<text x="726" y="1064" font-size="12" fill="#55606e">INT</text>
+<rect x="521" y="1071" width="318" height="23" fill="#e6f0fa"/>
+<line x1="520" y1="1071" x2="840" y2="1071" stroke="#d9dee5" stroke-width="1"/>
+<text x="530" y="1087" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="558" y="1087" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_veterinario</text>
+<text x="726" y="1087" font-size="12" fill="#55606e">INT</text>
+<line x1="552" y1="864" x2="552" y2="1094" stroke="#d9dee5" stroke-width="1"/>
+</g>
+<g>
+<rect x="980" y="560" width="320" height="172" rx="6" fill="#ffffff" stroke="#1f3a5f" stroke-width="1.6"/>
+<path d="M980 594 V566 a6 6 0 0 1 6 -6 H1294 a6 6 0 0 1 6 6 V594 Z" fill="#1f3a5f"/>
+<text x="1140.0" y="582" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">VETERINARIO</text>
+<rect x="981" y="594" width="318" height="23" fill="#fff4cc"/>
+<text x="990" y="610" font-size="11" font-weight="700" fill="#5a6b80">PK</text>
+<text x="1018" y="610" font-size="13" font-weight="700" fill="#1b1b1b" text-decoration="underline" xml:space="preserve">id_veterinario</text>
+<text x="1186" y="610" font-size="12" fill="#55606e">INT</text>
+<line x1="980" y1="617" x2="1300" y2="617" stroke="#d9dee5" stroke-width="1"/>
+<text x="1018" y="633" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">nome</text>
+<text x="1186" y="633" font-size="12" fill="#55606e">VARCHAR(100)</text>
+<line x1="980" y1="640" x2="1300" y2="640" stroke="#d9dee5" stroke-width="1"/>
+<text x="990" y="656" font-size="11" font-weight="700" fill="#5a6b80">UK</text>
+<text x="1018" y="656" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">crmv</text>
+<text x="1186" y="656" font-size="12" fill="#55606e">VARCHAR(15)</text>
+<line x1="980" y1="663" x2="1300" y2="663" stroke="#d9dee5" stroke-width="1"/>
+<text x="1018" y="679" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">especialidade</text>
+<text x="1186" y="679" font-size="12" fill="#55606e">VARCHAR(60)</text>
+<line x1="980" y1="686" x2="1300" y2="686" stroke="#d9dee5" stroke-width="1"/>
+<text x="1018" y="702" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">telefone</text>
+<text x="1186" y="702" font-size="12" fill="#55606e">VARCHAR(15)</text>
+<line x1="980" y1="709" x2="1300" y2="709" stroke="#d9dee5" stroke-width="1"/>
+<text x="1018" y="725" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">email</text>
+<text x="1186" y="725" font-size="12" fill="#55606e">VARCHAR(100)</text>
+<line x1="1012" y1="594" x2="1012" y2="732" stroke="#d9dee5" stroke-width="1"/>
+</g>
+<g>
+<rect x="980" y="900" width="320" height="195" rx="6" fill="#ffffff" stroke="#1f3a5f" stroke-width="1.6"/>
+<path d="M980 934 V906 a6 6 0 0 1 6 -6 H1294 a6 6 0 0 1 6 6 V934 Z" fill="#1f3a5f"/>
+<text x="1140.0" y="922" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">PRESCRICAO</text>
+<rect x="981" y="934" width="318" height="23" fill="#fff4cc"/>
+<text x="990" y="950" font-size="11" font-weight="700" fill="#5a6b80">PK</text>
+<text x="1018" y="950" font-size="13" font-weight="700" fill="#1b1b1b" text-decoration="underline" xml:space="preserve">id_prescricao</text>
+<text x="1186" y="950" font-size="12" fill="#55606e">INT</text>
+<line x1="980" y1="957" x2="1300" y2="957" stroke="#d9dee5" stroke-width="1"/>
+<text x="1018" y="973" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">medicamento</text>
+<text x="1186" y="973" font-size="12" fill="#55606e">VARCHAR(100)</text>
+<line x1="980" y1="980" x2="1300" y2="980" stroke="#d9dee5" stroke-width="1"/>
+<text x="1018" y="996" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">dosagem</text>
+<text x="1186" y="996" font-size="12" fill="#55606e">VARCHAR(50)</text>
+<line x1="980" y1="1003" x2="1300" y2="1003" stroke="#d9dee5" stroke-width="1"/>
+<text x="1018" y="1019" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">frequencia</text>
+<text x="1186" y="1019" font-size="12" fill="#55606e">VARCHAR(50)</text>
+<line x1="980" y1="1026" x2="1300" y2="1026" stroke="#d9dee5" stroke-width="1"/>
+<text x="1018" y="1042" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">duracao_dias</text>
+<text x="1186" y="1042" font-size="12" fill="#55606e">INT</text>
+<line x1="980" y1="1049" x2="1300" y2="1049" stroke="#d9dee5" stroke-width="1"/>
+<text x="1018" y="1065" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">orientacoes</text>
+<text x="1186" y="1065" font-size="12" fill="#55606e">TEXT</text>
+<rect x="981" y="1072" width="318" height="23" fill="#e6f0fa"/>
+<line x1="980" y1="1072" x2="1300" y2="1072" stroke="#d9dee5" stroke-width="1"/>
+<text x="990" y="1088" font-size="11" font-weight="700" fill="#5a6b80">FK</text>
+<text x="1018" y="1088" font-size="13" font-weight="400" fill="#1b1b1b" xml:space="preserve">id_atendimento</text>
+<text x="1186" y="1088" font-size="12" fill="#55606e">INT</text>
+<line x1="1012" y1="934" x2="1012" y2="1095" stroke="#d9dee5" stroke-width="1"/>
+</g>
+<rect x="60" y="780" width="320" height="300" rx="6" fill="#f7f9fb" stroke="#c4ccd6"/>
+<text x="74" y="806" font-size="14" font-weight="700" fill="#1b1b1b">Legenda</text>
+<path d="M80 834 L140 834" stroke="#3a3a3a" stroke-width="1.6" marker-end="url(#one)"/>
+<text x="156" y="838" font-size="12" fill="#1b1b1b">exatamente um (1,1)</text>
+<path d="M80 864 L140 864" stroke="#3a3a3a" stroke-width="1.6" marker-end="url(#opt)"/>
+<text x="156" y="868" font-size="12" fill="#1b1b1b">zero ou um (0,1)</text>
+<path d="M80 894 L140 894" stroke="#3a3a3a" stroke-width="1.6" marker-end="url(#many1)"/>
+<text x="156" y="898" font-size="12" fill="#1b1b1b">um ou muitos (1,N)</text>
+<path d="M80 924 L140 924" stroke="#3a3a3a" stroke-width="1.6" marker-end="url(#many0)"/>
+<text x="156" y="928" font-size="12" fill="#1b1b1b">zero ou muitos (0,N)</text>
+<rect x="80" y="944" width="26" height="16" fill="#fff4cc" stroke="#c4ccd6"/>
+<text x="116" y="957" font-size="12" fill="#1b1b1b">PK – chave primária</text>
+<rect x="80" y="970" width="26" height="16" fill="#e6f0fa" stroke="#c4ccd6"/>
+<text x="116" y="983" font-size="12" fill="#1b1b1b">FK – chave estrangeira</text>
+<text x="80" y="1009" font-size="12" fill="#1b1b1b"><tspan font-weight="700">UK</tspan> – valor único (chave candidata)</text>
+<text x="80" y="1034" font-size="11.5" fill="#55606e">Versão 1: antes da normalização.</text>
+<text x="80" y="1051" font-size="11.5" fill="#55606e">Notação: pé de galinha (crow’s foot).</text>
+</g>
+</svg>

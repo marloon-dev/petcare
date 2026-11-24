@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block titulo %}Tutores{% endblock %}
+{% block conteudo %}
+<div class="cabecalho">
+  <div><h1>Tutores</h1><p class="subtitulo">{{ tutores | length }} encontrado(s)</p></div>
+  <div class="acoes">
+    <form class="busca" method="get">
+      <input type="search" name="q" value="{{ busca }}" placeholder="Nome ou CPF" aria-label="Buscar tutor">
+      <button class="secundario" type="submit">Buscar</button>
+    </form>
+    <a class="botao" href="{{ url_for('main.tutor_novo') }}">Novo tutor</a>
+  </div>
+</div>
+<section class="cartao tabela">
+  {% if tutores %}
+  <table>
+    <thead><tr><th>Nome</th><th>CPF</th><th>Celular</th><th>Cidade</th><th>Animais</th></tr></thead>
+    <tbody>
+    {% for t in tutores %}
+      <tr>
+        <td><a href="{{ url_for('main.tutor', id_tutor=t.id_tutor) }}">{{ t.nome }}</a></td>
+        <td>{{ t.cpf[:3] }}.{{ t.cpf[3:6] }}.{{ t.cpf[6:9] }}-{{ t.cpf[9:] }}</td>
+        <td>{{ t.celular | fone if t.celular else '—' }}</td>
+        <td>{{ t.cidade }}/{{ t.uf }}</td>
+        <td>{{ t.animais }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="vazio">Nenhum tutor encontrado.</p>{% endif %}
+</section>
+{% endblock %}

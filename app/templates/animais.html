@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_macros.html" import sexo %}
+{% block titulo %}Animais{% endblock %}
+{% block conteudo %}
+<div class="cabecalho">
+  <div><h1>Animais</h1><p class="subtitulo">{{ animais | length }} encontrado(s)</p></div>
+  <div class="acoes">
+    <form class="busca" method="get">
+      <input type="search" name="q" value="{{ busca }}" placeholder="Nome do animal ou do tutor" aria-label="Buscar animal">
+      <button class="secundario" type="submit">Buscar</button>
+    </form>
+    <a class="botao" href="{{ url_for('main.animal_novo') }}">Novo animal</a>
+  </div>
+</div>
+<section class="cartao tabela">
+  {% if animais %}
+  <table>
+    <thead><tr><th>Nome</th><th>Espécie / raça</th><th>Sexo</th><th>Nascimento</th><th>Tutor</th></tr></thead>
+    <tbody>
+    {% for a in animais %}
+      <tr>
+        <td><a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.nome }}</a></td>
+        <td>{{ a.especie }} · {{ a.raca }}</td>
+        <td>{{ sexo(a.sexo) }}</td>
+        <td>{{ a.data_nascimento | data }}</td>
+        <td><a href="{{ url_for('main.tutor', id_tutor=a.id_tutor) }}">{{ a.tutor }}</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="vazio">Nenhum animal encontrado.</p>{% endif %}
+</section>
+{% endblock %}

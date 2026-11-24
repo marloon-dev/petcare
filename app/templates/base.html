@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}PetCare{% endblock %} · PetCare</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="{{ url_for('main.painel') }}">🐾 PetCare</a>
+    <nav>
+      {% set rota = request.endpoint or '' %}
+      <a href="{{ url_for('main.painel') }}" class="{{ 'ativo' if rota == 'main.painel' }}">Painel</a>
+      <a href="{{ url_for('main.agenda') }}" class="{{ 'ativo' if 'agend' in rota or 'atendimento' in rota }}">Agenda</a>
+      <a href="{{ url_for('main.tutores') }}" class="{{ 'ativo' if 'tutor' in rota }}">Tutores</a>
+      <a href="{{ url_for('main.animais') }}" class="{{ 'ativo' if 'anima' in rota }}">Animais</a>
+      <a href="{{ url_for('main.vacinas') }}" class="{{ 'ativo' if rota == 'main.vacinas' }}">Vacinas</a>
+    </nav>
+  </header>
+
+  <main>
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+      {% for categoria, mensagem in mensagens %}
+        <div class="aviso aviso-{{ categoria }}" role="status">{{ mensagem }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block conteudo %}{% endblock %}
+  </main>
+
+  <footer class="rodape">PetCare · projeto acadêmico de Modelagem de Banco de Dados · dados fictícios</footer>
+</body>
+</html>

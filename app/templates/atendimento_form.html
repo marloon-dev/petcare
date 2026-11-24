@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block titulo %}Atendimento{% endblock %}
+{% block conteudo %}
+<h1>Atendimento de {{ ag.animal }}</h1>
+<p class="subtitulo">{{ ag.especie }} · tutor {{ ag.tutor }} · {{ ag.tipo_atendimento }} agendado para
+  {{ ag.data_hora | data_hora }} com {{ ag.veterinario }}</p>
+<section class="cartao">
+  <form class="formulario" method="post">
+    <label class="inteiro">Queixa principal *
+      <textarea name="queixa" required>{{ form.get('queixa', '') }}</textarea></label>
+    <label>Peso aferido (kg)
+      <input name="peso_aferido" inputmode="decimal" placeholder="ex.: 12,5" value="{{ form.get('peso_aferido', '') }}"></label>
+    <label class="inteiro">Diagnóstico *
+      <textarea name="diagnostico" required>{{ form.get('diagnostico', '') }}</textarea></label>
+    <label class="inteiro">Tratamento
+      <textarea name="tratamento">{{ form.get('tratamento', '') }}</textarea></label>
+    <label class="inteiro">Observações
+      <textarea name="observacoes">{{ form.get('observacoes', '') }}</textarea></label>
+
+    {% for i in range(1, 4) %}
+    <fieldset class="inteiro">
+      <legend>Prescrição {{ i }} <small>(opcional)</small></legend>
+      <div class="formulario">
+        <label>Medicamento <input name="medicamento_{{ i }}" maxlength="100" value="{{ form.get('medicamento_' ~ i, '') }}"></label>
+        <label>Dosagem <input name="dosagem_{{ i }}" maxlength="50" placeholder="ex.: 20 mg" value="{{ form.get('dosagem_' ~ i, '') }}"></label>
+        <label>Frequência <input name="frequencia_{{ i }}" maxlength="50" placeholder="ex.: a cada 12 horas" value="{{ form.get('frequencia_' ~ i, '') }}"></label>
+        <label>Duração (dias) <input name="duracao_{{ i }}" type="number" min="1" value="{{ form.get('duracao_' ~ i, '') }}"></label>
+        <label class="inteiro">Orientações <input name="orientacoes_{{ i }}" value="{{ form.get('orientacoes_' ~ i, '') }}"></label>
+      </div>
+    </fieldset>
+    {% endfor %}
+
+    <div class="inteiro acoes">
+      <button type="submit">Registrar atendimento</button>
+      <a class="botao secundario" href="{{ url_for('main.animal', id_animal=ag.id_animal) }}">Voltar</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,17 @@
+# Ambiente virtual e cache do Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Configuração local (contém senha)
+.env
+
+# Banco SQLite de demonstração
+*.db
+
+# Sistema
+.DS_Store
+
+# Configuração local do Claude Code
+.claude/

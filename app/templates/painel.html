@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% from "_macros.html" import situacao_vacina %}
+{% block titulo %}Painel{% endblock %}
+{% block conteudo %}
+<h1>Painel da clínica</h1>
+<p class="subtitulo">Hoje é {{ hoje | data }}.</p>
+
+<section class="totais">
+  <div class="total"><strong>{{ totais.tutores }}</strong><span>tutores</span></div>
+  <div class="total"><strong>{{ totais.animais }}</strong><span>animais</span></div>
+  <div class="total"><strong>{{ totais.veterinarios }}</strong><span>veterinários</span></div>
+  <div class="total"><strong>{{ totais.agendados }}</strong><span>agendamentos pendentes</span></div>
+</section>
+
+<div class="grade">
+  <section class="cartao">
+    <div class="cabecalho">
+      <h2>Próximos agendamentos</h2>
+      <a class="botao pequeno" href="{{ url_for('main.agendamento_novo') }}">Novo agendamento</a>
+    </div>
+    {% if agenda %}
+    <div class="tabela"><table>
+      <thead><tr><th>Quando</th><th>Animal</th><th>Veterinário</th></tr></thead>
+      <tbody>
+      {% for ag in agenda %}
+        <tr>
+          <td>{{ ag.data_hora | data_hora }}<br><span class="meta">{{ ag.tipo_atendimento }}</span></td>
+          <td><a href="{{ url_for('main.animal', id_animal=ag.id_animal) }}">{{ ag.animal }}</a><br><span class="meta">{{ ag.tutor }}</span></td>
+          <td>{{ ag.veterinario }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}<p class="vazio">Nenhum agendamento pendente.</p>{% endif %}
+  </section>
+
+  <section class="cartao">
+    <div class="cabecalho">
+      <h2>Vacinas vencidas ou a vencer (30 dias)</h2>
+      <a class="botao pequeno secundario" href="{{ url_for('main.vacinas') }}">Registrar vacina</a>
+    </div>
+    {% if alertas %}
+    <div class="tabela"><table>
+      <thead><tr><th>Animal</th><th>Vacina</th><th>Situação</th></tr></thead>
+      <tbody>
+      {% for a in alertas %}
+        <tr>
+          <td><a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.animal }}</a><br><span class="meta">{{ a.tutor }}</span></td>
+          <td>{{ a.vacina }}<br><span class="meta">reforço em {{ a.proxima_dose | data }}</span></td>
+          <td>{{ situacao_vacina(a.dias_restantes) }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}<p class="vazio">Nenhuma vacina vencida ou próxima do vencimento.</p>{% endif %}
+  </section>
+</div>
+{% endblock %}

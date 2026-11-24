@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block titulo %}Novo tutor{% endblock %}
+{% block conteudo %}
+<h1>Novo tutor</h1>
+<p class="subtitulo">Campos marcados com * são obrigatórios.</p>
+<section class="cartao">
+  <form class="formulario" method="post">
+    <label class="inteiro">Nome completo *
+      <input name="nome" required maxlength="100" value="{{ form.get('nome', '') }}"></label>
+    <label>CPF * <small>somente números</small>
+      <input name="cpf" required inputmode="numeric" maxlength="14" value="{{ form.get('cpf', '') }}"></label>
+    <label>E-mail
+      <input name="email" type="email" maxlength="100" value="{{ form.get('email', '') }}"></label>
+    <label>Celular * <small>com DDD</small>
+      <input name="celular" required inputmode="tel" maxlength="15" value="{{ form.get('celular', '') }}"></label>
+    <label>Outro telefone
+      <input name="telefone2" inputmode="tel" maxlength="15" value="{{ form.get('telefone2', '') }}"></label>
+    <label>Tipo do outro telefone
+      <select name="tipo2">
+        {% for tipo in tipos_telefone if tipo != 'Celular' %}
+          <option {{ 'selected' if form.get('tipo2') == tipo }}>{{ tipo }}</option>
+        {% endfor %}
+      </select></label>
+
+    <label class="inteiro">Logradouro *
+      <input name="logradouro" required maxlength="120" value="{{ form.get('logradouro', '') }}"></label>
+    <label>Número *
+      <input name="numero" required maxlength="10" value="{{ form.get('numero', '') }}"></label>
+    <label>Complemento
+      <input name="complemento" maxlength="60" value="{{ form.get('complemento', '') }}"></label>
+    <label>Bairro *
+      <input name="bairro" required maxlength="60" value="{{ form.get('bairro', '') }}"></label>
+    <label>Cidade *
+      <input name="cidade" required maxlength="60" value="{{ form.get('cidade', '') }}"></label>
+    <label>UF *
+      <select name="uf" required>
+        <option value="">Selecione</option>
+        {% for uf in ufs %}<option {{ 'selected' if form.get('uf', '').upper() == uf }}>{{ uf }}</option>{% endfor %}
+      </select></label>
+    <label>CEP *
+      <input name="cep" required inputmode="numeric" maxlength="9" value="{{ form.get('cep', '') }}"></label>
+
+    <div class="inteiro acoes">
+      <button type="submit">Salvar tutor</button>
+      <a class="botao secundario" href="{{ url_for('main.tutores') }}">Cancelar</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

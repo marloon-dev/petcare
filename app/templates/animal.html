@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% from "_macros.html" import situacao_vacina, sexo %}
+{% block titulo %}{{ animal.nome }}{% endblock %}
+{% block conteudo %}
+<div class="cabecalho">
+  <div>
+    <h1>{{ animal.nome }}</h1>
+    <p class="subtitulo">{{ animal.especie }} · {{ animal.raca }} · tutor
+      <a href="{{ url_for('main.tutor', id_tutor=animal.id_tutor) }}">{{ animal.tutor }}</a></p>
+  </div>
+  <div class="acoes">
+    <a class="botao" href="{{ url_for('main.agendamento_novo', animal=animal.id_animal) }}">Agendar</a>
+    <a class="botao secundario" href="{{ url_for('main.vacinas', animal=animal.id_animal) }}">Registrar vacina</a>
+  </div>
+</div>
+
+<div class="grade">
+  <section class="cartao">
+    <h2>Dados</h2>
+    <dl class="dados">
+      <dt>Sexo</dt><dd>{{ sexo(animal.sexo) }}</dd>
+      <dt>Nascimento</dt><dd>{{ animal.data_nascimento | data }}</dd>
+      <dt>Peso atual</dt>
+      <dd>{% if peso %}{{ '%.2f' | format(peso.peso_aferido | float) }} kg
+          <span class="meta">(aferido em {{ peso.data_hora_inicio | data }})</span>
+          {% else %}—{% endif %}</dd>
+    </dl>
+  </section>
+
+  <section class="cartao tabela">
+    <h2>Agendamentos pendentes</h2>
+    {% if agendamentos %}
+    <table>
+      <tbody>
+      {% for ag in agendamentos %}
+        <tr>
+          <td>{{ ag.data_hora | data_hora }}<br><span class="meta">{{ ag.tipo_atendimento }} · {{ ag.veterinario }}</span></td>
+          <td class="acoes">
+            <a class="botao pequeno" href="{{ url_for('main.atendimento_novo', id_agendamento=ag.id_agendamento) }}">Atender</a>
+            <form method="post" action="{{ url_for('main.agendamento_cancelar', id_agendamento=ag.id_agendamento) }}">
+              <button class="perigo pequeno" type="submit">Cancelar</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<p class="vazio">Nenhum agendamento pendente.</p>{% endif %}
+  </section>
+</div>
+
+<section class="cartao tabela">
+  <h2>Situação vacinal</h2>
+  {% if alertas %}
+  <table>
+    <thead><tr><th>Vacina</th><th>Última dose</th><th>Próximo reforço</th><th>Situação</th></tr></thead>
+    <tbody>
+    {% for a in alertas %}
+      <tr>
+        <td>{{ a.vacina }}</td>
+        <td>{{ a.data_aplicacao | data }}</td>
+        <td>{{ a.proxima_dose | data }}</td>
+        <td>{{ situacao_vacina(a.dias_restantes) }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="vazio">Nenhuma vacina registrada.</p>{% endif %}
+  {% if vacinas %}
+  <details>
+    <summary class="meta">Histórico completo de doses ({{ vacinas | length }})</summary>
+    <table>
+      <thead><tr><th>Data</th><th>Vacina</th><th>Lote</th><th>Veterinário</th></tr></thead>
+      <tbody>
+      {% for v in vacinas %}
+        <tr><td>{{ v.data_aplicacao | data }}</td><td>{{ v.vacina }}</td><td>{{ v.lote }}</td><td>{{ v.veterinario }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </details>
+  {% endif %}
+</section>
+
+<section class="cartao">
+  <h2>Prontuário</h2>
+  {% for at in atendimentos %}
+    <article class="atendimento">
+      <p class="meta">{{ at.data_hora_inicio | data_hora }} · {{ at.tipo_atendimento }} · {{ at.veterinario }}
+        {% if at.peso_aferido %} · {{ '%.2f' | format(at.peso_aferido | float) }} kg{% endif %}</p>
+      <p><strong>Queixa:</strong> {{ at.queixa }}</p>
+      <p><strong>Diagnóstico:</strong> {{ at.diagnostico }}</p>
+      {% if at.tratamento %}<p><strong>Tratamento:</strong> {{ at.tratamento }}</p>{% endif %}
+      {% if at.prescricoes %}
+        <p><strong>Prescrições:</strong></p>
+        <ul>
+        {% for p in at.prescricoes %}
+          <li>{{ p.medicamento }} {{ p.dosagem }}: {{ p.frequencia }}, por {{ p.duracao_dias }} dia(s){% if p.orientacoes %}. <span class="meta">{{ p.orientacoes }}</span>{% endif %}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    </article>
+  {% else %}
+    <p class="vazio">Nenhum atendimento registrado.</p>
+  {% endfor %}
+</section>
+{% endblock %}

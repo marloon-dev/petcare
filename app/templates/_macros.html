@@ -1,0 +1,11 @@
+{% macro situacao_vacina(dias) -%}
+  {%- if dias < 0 -%}
+    <span class="etiqueta vencida">Vencida há {{ -dias }} dia{{ 's' if -dias != 1 }}</span>
+  {%- elif dias <= 30 -%}
+    <span class="etiqueta proxima">Vence em {{ dias }} dia{{ 's' if dias != 1 }}</span>
+  {%- else -%}
+    <span class="etiqueta em-dia">Em dia</span>
+  {%- endif -%}
+{%- endmacro %}
+
+{% macro sexo(valor) -%}{{ 'Macho' if valor == 'M' else 'Fêmea' }}{%- endmacro %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block titulo %}Novo agendamento{% endblock %}
+{% block conteudo %}
+<h1>Novo agendamento</h1>
+<p class="subtitulo">O sistema impede dois agendamentos do mesmo veterinário no mesmo horário.</p>
+<section class="cartao">
+  <form class="formulario" method="post">
+    <label>Animal *
+      <select name="id_animal" required>
+        <option value="">Selecione</option>
+        {% for a in animais %}
+          <option value="{{ a.id_animal }}" {{ 'selected' if form.get('id_animal') | string == a.id_animal | string }}>{{ a.nome }} ({{ a.tutor }})</option>
+        {% endfor %}
+      </select></label>
+    <label>Veterinário *
+      <select name="id_veterinario" required>
+        <option value="">Selecione</option>
+        {% for v in veterinarios %}
+          <option value="{{ v.id_veterinario }}" {{ 'selected' if form.get('id_veterinario') | string == v.id_veterinario | string }}>{{ v.nome }} · {{ v.especialidade }}</option>
+        {% endfor %}
+      </select></label>
+    <label>Tipo *
+      <select name="tipo_atendimento" required>
+        {% for t in tipos %}<option {{ 'selected' if form.get('tipo_atendimento') == t }}>{{ t }}</option>{% endfor %}
+      </select></label>
+    <label>Data *
+      <input name="data" type="date" required value="{{ form.get('data', '') }}"></label>
+    <label>Horário *
+      <input name="hora" type="time" required step="900" value="{{ form.get('hora', '') }}"></label>
+    <label class="inteiro">Observações
+      <textarea name="observacoes">{{ form.get('observacoes', '') }}</textarea></label>
+    <div class="inteiro acoes">
+      <button type="submit">Agendar</button>
+      <a class="botao secundario" href="{{ url_for('main.agenda') }}">Cancelar</a>
+    </div>
+  </form>
+</section>
+{% endblock %}
