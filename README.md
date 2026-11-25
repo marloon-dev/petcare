@@ -35,7 +35,8 @@ PetCare/
 ├── tests/                  # testes automatizados (pytest)
 ├── run.py                  # ponto de entrada (flask --app run ...)
 ├── requirements.txt
-└── .env.example
+├── .env.example
+└── LICENSE                 # licença MIT
 ```
 
 ## Como executar
@@ -104,6 +105,10 @@ São 33 testes que criam um banco SQLite temporário com a carga de teste e veri
 | [docs/03-normalizacao.md](docs/03-normalizacao.md) | Auditoria 1FN, 2FN e 3FN e modelo lógico final |
 | [docs/04-sql.md](docs/04-sql.md) | Scripts SQL e ligação entre o modelo e o software |
 | [database/README.md](database/README.md) | Como executar os scripts no MySQL |
+
+## Licença
+
+Distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE).
 
 ---
 
