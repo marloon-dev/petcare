@@ -1,64 +1,69 @@
 {% extends "base.html" %}
-{% from "_macros.html" import situacao_vacina %}
+{% from "_macros.html" import situacao_vacina, icone, avatar, vazio, obrig %}
 {% block titulo %}Vacinas{% endblock %}
 {% block conteudo %}
-<h1>Vacinas</h1>
-<p class="subtitulo">A próxima dose é calculada pela data da última aplicação mais o intervalo de reforço da vacina.</p>
+<div class="pagina-topo">
+  <div><h1>Vacinas</h1><p class="subtitulo">A próxima dose é calculada pela última aplicação mais o intervalo de reforço da vacina.</p></div>
+</div>
 
-<div class="grade">
+<div class="grade-lateral">
   <section class="cartao">
-    <h2>Registrar aplicação</h2>
-    <form class="formulario" method="post">
-      <label class="inteiro">Animal *
-        <select name="id_animal" required>
-          <option value="">Selecione</option>
-          {% for a in animais %}
-            <option value="{{ a.id_animal }}" {{ 'selected' if form.get('id_animal') | string == a.id_animal | string }}>{{ a.nome }} · {{ a.especie }} ({{ a.tutor }})</option>
-          {% endfor %}
-        </select></label>
-      <label class="inteiro">Vacina *
-        <select name="id_vacina" required>
-          <option value="">Selecione</option>
-          {% for especie, grupo in vacinas_lista | groupby('especie') %}
-            <optgroup label="{{ especie }}">
-            {% for v in grupo %}
-              <option value="{{ v.id_vacina }}" {{ 'selected' if form.get('id_vacina') | string == v.id_vacina | string }}>{{ v.nome }}</option>
+    <div class="cartao-topo"><div class="cartao-titulo"><span class="selo">{{ icone('vacinas') }}</span><h2>Registrar aplicação</h2></div></div>
+    <div class="cartao-corpo" style="padding-top:0">
+      <form class="formulario" method="post">
+        <label class="inteiro">Animal {{ obrig() }}
+          <select name="id_animal" required>
+            <option value="">Selecione</option>
+            {% for a in animais %}
+              <option value="{{ a.id_animal }}" {{ 'selected' if form.get('id_animal') | string == a.id_animal | string }}>{{ a.nome }} · {{ a.especie }} ({{ a.tutor }})</option>
             {% endfor %}
-            </optgroup>
-          {% endfor %}
-        </select></label>
-      <label>Veterinário *
-        <select name="id_veterinario" required>
-          <option value="">Selecione</option>
-          {% for v in veterinarios %}
-            <option value="{{ v.id_veterinario }}" {{ 'selected' if form.get('id_veterinario') | string == v.id_veterinario | string }}>{{ v.nome }}</option>
-          {% endfor %}
-        </select></label>
-      <label>Data *
-        <input name="data_aplicacao" type="date" required value="{{ form.get('data_aplicacao', '') }}"></label>
-      <label>Lote *
-        <input name="lote" required maxlength="30" value="{{ form.get('lote', '') }}"></label>
-      <div class="inteiro"><button type="submit">Registrar</button></div>
-    </form>
+          </select></label>
+        <label class="inteiro">Vacina {{ obrig() }} <small>só vacinas da espécie do animal são aceitas</small>
+          <select name="id_vacina" required>
+            <option value="">Selecione</option>
+            {% for especie, grupo in vacinas_lista | groupby('especie') %}
+              <optgroup label="{{ especie }}">
+              {% for v in grupo %}
+                <option value="{{ v.id_vacina }}" {{ 'selected' if form.get('id_vacina') | string == v.id_vacina | string }}>{{ v.nome }}</option>
+              {% endfor %}
+              </optgroup>
+            {% endfor %}
+          </select></label>
+        <label class="inteiro">Veterinário {{ obrig() }}
+          <select name="id_veterinario" required>
+            <option value="">Selecione</option>
+            {% for v in veterinarios %}
+              <option value="{{ v.id_veterinario }}" {{ 'selected' if form.get('id_veterinario') | string == v.id_veterinario | string }}>{{ v.nome }}</option>
+            {% endfor %}
+          </select></label>
+        <label>Data {{ obrig() }}
+          <input name="data_aplicacao" type="date" required max="{{ data_hoje.isoformat() }}" value="{{ form.get('data_aplicacao', '') }}"></label>
+        <label>Lote {{ obrig() }}
+          <input name="lote" required maxlength="30" value="{{ form.get('lote', '') }}"></label>
+        <div class="form-acoes"><button type="submit">{{ icone('check', 'p') }}Registrar dose</button></div>
+      </form>
+    </div>
   </section>
 
-  <section class="cartao tabela">
-    <h2>Vencidas ou a vencer (30 dias)</h2>
+  <section class="cartao">
+    <div class="cartao-topo"><div class="cartao-titulo"><span class="selo ambar">{{ icone('alerta') }}</span>
+      <div><h2>Vencidas ou a vencer</h2><span class="meta">próximos 30 dias</span></div></div></div>
     {% if alertas %}
-    <table>
+    <div class="tabela"><table class="responsiva">
       <thead><tr><th>Animal</th><th>Vacina</th><th>Reforço</th><th>Situação</th></tr></thead>
       <tbody>
       {% for a in alertas %}
         <tr>
-          <td><a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.animal }}</a><br><span class="meta">{{ a.tutor }}</span></td>
-          <td>{{ a.vacina }}</td>
-          <td>{{ a.proxima_dose | data }}</td>
-          <td>{{ situacao_vacina(a.dias_restantes) }}</td>
+          <td class="principal-celula"><div class="pessoa">{{ avatar(a.especie) }}
+            <div><a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.animal }}</a><span class="meta">{{ a.tutor }}</span></div></div></td>
+          <td data-rotulo="Vacina">{{ a.vacina }}</td>
+          <td data-rotulo="Reforço">{{ a.proxima_dose | data }}</td>
+          <td data-rotulo="Situação">{{ situacao_vacina(a.dias_restantes) }}</td>
         </tr>
       {% endfor %}
       </tbody>
-    </table>
-    {% else %}<p class="vazio">Nenhuma vacina vencida ou próxima do vencimento.</p>{% endif %}
+    </table></div>
+    {% else %}{{ vazio('Nenhuma vacina vencida ou próxima do vencimento.', 'check') }}{% endif %}
   </section>
 </div>
 {% endblock %}

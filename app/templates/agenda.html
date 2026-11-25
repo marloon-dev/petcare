@@ -1,39 +1,49 @@
 {% extends "base.html" %}
+{% from "_macros.html" import icone, avatar, vazio %}
 {% block titulo %}Agenda{% endblock %}
 {% block conteudo %}
-<div class="cabecalho">
-  <div><h1>Agenda</h1><p class="subtitulo">{{ agendamentos | length }} agendamento(s)</p></div>
-  <a class="botao" href="{{ url_for('main.agendamento_novo') }}">Novo agendamento</a>
+<div class="pagina-topo">
+  <div><h1>Agenda</h1><p class="subtitulo">Gerencie os atendimentos da clínica</p></div>
+  <a class="botao" href="{{ url_for('main.agendamento_novo') }}">{{ icone('mais', 'p') }}Novo agendamento</a>
 </div>
-<nav class="filtros" aria-label="Filtrar por status">
-  {% for opcao in ['Agendado', 'Realizado', 'Cancelado', 'Todos'] %}
-    <a href="{{ url_for('main.agenda', status=opcao) }}" class="{{ 'ativo' if filtro == opcao }}">{{ opcao }}</a>
-  {% endfor %}
-</nav>
-<section class="cartao tabela">
+
+<section class="cartao">
+  <div class="cartao-topo">
+    <nav class="filtros" aria-label="Filtrar por status">
+      {% for opcao, rotulo in [('Agendado', 'Agendados'), ('Realizado', 'Realizados'), ('Cancelado', 'Cancelados'), ('Todos', 'Todos')] %}
+        <a href="{{ url_for('main.agenda', status=opcao) }}" {% if filtro == opcao %}aria-current="page"{% endif %}>
+          {{ rotulo }}<span class="contagem">{{ contagem.get(opcao, 0) }}</span></a>
+      {% endfor %}
+    </nav>
+  </div>
   {% if agendamentos %}
-  <table>
-    <thead><tr><th>Data e hora</th><th>Tipo</th><th>Animal</th><th>Veterinário</th><th>Status</th><th></th></tr></thead>
+  <div class="tabela"><table class="responsiva">
+    <thead><tr><th>Data e hora</th><th>Tipo</th><th>Animal</th><th>Tutor</th><th>Veterinário</th><th>Status</th><th><span class="sr">Ações</span></th></tr></thead>
     <tbody>
     {% for ag in agendamentos %}
       <tr>
-        <td>{{ ag.data_hora | data_hora }}</td>
-        <td>{{ ag.tipo_atendimento }}{% if ag.observacoes %}<br><span class="meta">{{ ag.observacoes }}</span>{% endif %}</td>
-        <td><a href="{{ url_for('main.animal', id_animal=ag.id_animal) }}">{{ ag.animal }}</a><br><span class="meta">{{ ag.tutor }}</span></td>
-        <td>{{ ag.veterinario }}</td>
-        <td><span class="etiqueta {{ ag.status }}">{{ ag.status }}</span></td>
-        <td class="acoes">
-          {% if ag.status == 'Agendado' %}
+        <td class="quando principal-celula">{{ ag.data_hora | data }}<span class="meta">{{ ag.data_hora | hora }}</span></td>
+        <td data-rotulo="Tipo"><div>{{ ag.tipo_atendimento }}{% if ag.observacoes %}<span class="meta bloco">{{ ag.observacoes }}</span>{% endif %}</div></td>
+        <td data-rotulo="Animal">
+          <div class="pessoa">{{ avatar(ag.especie) }}<a href="{{ url_for('main.animal', id_animal=ag.id_animal) }}">{{ ag.animal }}</a></div>
+        </td>
+        <td data-rotulo="Tutor">{{ ag.tutor }}</td>
+        <td data-rotulo="Veterinário">{{ ag.veterinario }}</td>
+        <td data-rotulo="Status"><span class="etiqueta {{ ag.status }}">{{ ag.status }}</span></td>
+        <td class="col-acoes">
+          {% if ag.status == 'Agendado' %}<div class="acoes">
             <a class="botao pequeno" href="{{ url_for('main.atendimento_novo', id_agendamento=ag.id_agendamento) }}">Atender</a>
-            <form method="post" action="{{ url_for('main.agendamento_cancelar', id_agendamento=ag.id_agendamento) }}">
+            <form method="post" action="{{ url_for('main.agendamento_cancelar', id_agendamento=ag.id_agendamento) }}"
+                  onsubmit='return confirm({{ ("Cancelar o agendamento de " ~ ag.animal ~ " em " ~ (ag.data_hora | data_hora) ~ "?") | tojson }})'>
               <button class="perigo pequeno" type="submit">Cancelar</button>
             </form>
-          {% endif %}
+          </div>{% endif %}
         </td>
       </tr>
     {% endfor %}
     </tbody>
-  </table>
-  {% else %}<p class="vazio">Nenhum agendamento com este status.</p>{% endif %}
+  </table></div>
+  {% else %}{{ vazio('Nenhum agendamento com este status.', 'agenda') }}{% endif %}
+  <div class="cartao-rodape"><span class="meta">Mostrando {{ agendamentos | length }} agendamento(s)</span></div>
 </section>
 {% endblock %}

@@ -48,12 +48,14 @@ def alertas_vacina(id_animal=None, dias=DIAS_ALERTA_VACINA):
     Considera só a dose mais recente de cada vacina por animal.
     """
     sql = """
-        SELECT an.id_animal, an.nome AS animal, tu.id_tutor, tu.nome AS tutor,
+        SELECT an.id_animal, an.nome AS animal, tu.id_tutor, tu.nome AS tutor, es.nome AS especie,
                va.nome AS vacina, va.intervalo_reforco_dias, av.data_aplicacao
         FROM aplicacao_vacina AS av
-            INNER JOIN vacina AS va ON va.id_vacina = av.id_vacina
-            INNER JOIN animal AS an ON an.id_animal = av.id_animal
-            INNER JOIN tutor  AS tu ON tu.id_tutor  = an.id_tutor
+            INNER JOIN vacina  AS va ON va.id_vacina  = av.id_vacina
+            INNER JOIN animal  AS an ON an.id_animal  = av.id_animal
+            INNER JOIN raca    AS ra ON ra.id_raca    = an.id_raca
+            INNER JOIN especie AS es ON es.id_especie = ra.id_especie
+            INNER JOIN tutor   AS tu ON tu.id_tutor   = an.id_tutor
         WHERE NOT EXISTS (
             SELECT 1 FROM aplicacao_vacina AS posterior
             WHERE posterior.id_animal = av.id_animal
@@ -75,13 +77,20 @@ def alertas_vacina(id_animal=None, dias=DIAS_ALERTA_VACINA):
     return sorted(resultado, key=lambda r: r["proxima_dose"])
 
 
+def saudacao() -> str:
+    hora = datetime.now().hour
+    return "Bom dia" if 5 <= hora < 12 else "Boa tarde" if hora < 18 else "Boa noite"
+
+
 def proximos_agendamentos(limite=10):
     return query(
         """
         SELECT ag.id_agendamento, ag.data_hora, ag.tipo_atendimento, ag.observacoes,
-               an.id_animal, an.nome AS animal, tu.nome AS tutor, ve.nome AS veterinario
+               an.id_animal, an.nome AS animal, es.nome AS especie, tu.nome AS tutor, ve.nome AS veterinario
         FROM agendamento AS ag
             INNER JOIN animal      AS an ON an.id_animal      = ag.id_animal
+            INNER JOIN raca        AS ra ON ra.id_raca        = an.id_raca
+            INNER JOIN especie     AS es ON es.id_especie     = ra.id_especie
             INNER JOIN tutor       AS tu ON tu.id_tutor       = an.id_tutor
             INNER JOIN veterinario AS ve ON ve.id_veterinario = ag.id_veterinario
         WHERE ag.status = 'Agendado' AND ag.data_hora >= :inicio
@@ -114,7 +123,46 @@ def painel():
         agenda=proximos_agendamentos(5),
         alertas=alertas_vacina(),
         hoje=hoje(),
+        saudacao=saudacao(),
     )
+
+
+# ---------------------------------------------------------------------------
+# Busca geral (barra superior)
+# ---------------------------------------------------------------------------
+@bp.route("/busca")
+def busca():
+    termo = (request.args.get("q") or "").strip()
+    tutores_rows, animais_rows = [], []
+    if termo:
+        digitos = so_digitos(termo)
+        tutores_rows = query(
+            """
+            SELECT tu.id_tutor, tu.nome, tu.cpf, tu.cidade, tu.uf,
+                   (SELECT COUNT(*) FROM animal AS an WHERE an.id_tutor = tu.id_tutor) AS animais
+            FROM tutor AS tu
+            WHERE tu.nome LIKE :busca OR (:digitos <> '' AND tu.cpf LIKE :cpf)
+            ORDER BY tu.nome
+            LIMIT 20
+            """,
+            busca=f"%{termo}%",
+            digitos=digitos,
+            cpf=f"%{digitos}%",
+        )
+        animais_rows = query(
+            """
+            SELECT an.id_animal, an.nome, ra.nome AS raca, es.nome AS especie, tu.nome AS tutor
+            FROM animal AS an
+                INNER JOIN raca    AS ra ON ra.id_raca    = an.id_raca
+                INNER JOIN especie AS es ON es.id_especie = ra.id_especie
+                INNER JOIN tutor   AS tu ON tu.id_tutor   = an.id_tutor
+            WHERE an.nome LIKE :busca OR tu.nome LIKE :busca
+            ORDER BY an.nome
+            LIMIT 20
+            """,
+            busca=f"%{termo}%",
+        )
+    return render_template("busca.html", termo=termo, tutores=tutores_rows, animais=animais_rows)
 
 
 # ---------------------------------------------------------------------------
@@ -386,9 +434,11 @@ def agenda():
     filtro = request.args.get("status", "Agendado")
     sql = """
         SELECT ag.id_agendamento, ag.data_hora, ag.tipo_atendimento, ag.status, ag.observacoes,
-               an.id_animal, an.nome AS animal, tu.nome AS tutor, ve.nome AS veterinario
+               an.id_animal, an.nome AS animal, es.nome AS especie, tu.nome AS tutor, ve.nome AS veterinario
         FROM agendamento AS ag
             INNER JOIN animal      AS an ON an.id_animal      = ag.id_animal
+            INNER JOIN raca        AS ra ON ra.id_raca        = an.id_raca
+            INNER JOIN especie     AS es ON es.id_especie     = ra.id_especie
             INNER JOIN tutor       AS tu ON tu.id_tutor       = an.id_tutor
             INNER JOIN veterinario AS ve ON ve.id_veterinario = ag.id_veterinario
     """
@@ -397,7 +447,11 @@ def agenda():
         sql += " WHERE ag.status = :status"
         params["status"] = filtro
     sql += " ORDER BY ag.data_hora " + ("ASC" if filtro == "Agendado" else "DESC")
-    return render_template("agenda.html", agendamentos=query(sql, **params), filtro=filtro)
+    contagem = {row["status"]: row["total"] for row in query(
+        "SELECT status, COUNT(*) AS total FROM agendamento GROUP BY status")}
+    contagem["Todos"] = sum(contagem.values())
+    return render_template("agenda.html", agendamentos=query(sql, **params), filtro=filtro,
+                           contagem=contagem)
 
 
 def _opcoes_agendamento():

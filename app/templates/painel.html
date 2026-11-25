@@ -1,58 +1,103 @@
 {% extends "base.html" %}
-{% from "_macros.html" import situacao_vacina %}
-{% block titulo %}Painel{% endblock %}
+{% from "_macros.html" import situacao_vacina, icone, avatar, vazio %}
+{% block titulo %}Visão geral{% endblock %}
 {% block conteudo %}
-<h1>Painel da clínica</h1>
-<p class="subtitulo">Hoje é {{ hoje | data }}.</p>
+<div class="boas-vindas">
+  <div>
+    <h1>{{ saudacao }}, equipe PetCare!</h1>
+    <p class="subtitulo">Veja o que precisa de atenção na clínica hoje.</p>
+  </div>
+  <p class="frase">{{ icone('animais') }}<span>“Mais saúde para hoje.<br>Mais histórias para sempre.”</span></p>
+</div>
 
-<section class="totais">
-  <div class="total"><strong>{{ totais.tutores }}</strong><span>tutores</span></div>
-  <div class="total"><strong>{{ totais.animais }}</strong><span>animais</span></div>
-  <div class="total"><strong>{{ totais.veterinarios }}</strong><span>veterinários</span></div>
-  <div class="total"><strong>{{ totais.agendados }}</strong><span>agendamentos pendentes</span></div>
+<section class="totais" aria-label="Resumo da clínica">
+  <a class="total" href="{{ url_for('main.tutores') }}">
+    <span class="selo">{{ icone('tutores') }}</span>
+    <span class="rotulo">Tutores</span>
+    <strong data-total="tutores">{{ totais.tutores }}</strong>
+    <span class="meta">tutores cadastrados</span>
+  </a>
+  <a class="total" href="{{ url_for('main.animais') }}">
+    <span class="selo folha">{{ icone('animais') }}</span>
+    <span class="rotulo">Animais</span>
+    <strong data-total="animais">{{ totais.animais }}</strong>
+    <span class="meta">animais cadastrados</span>
+  </a>
+  <div class="total">
+    <span class="selo ambar">{{ icone('veterinario') }}</span>
+    <span class="rotulo">Veterinários</span>
+    <strong data-total="veterinarios">{{ totais.veterinarios }}</strong>
+    <span class="meta">veterinários na equipe</span>
+  </div>
+  <a class="total" href="{{ url_for('main.agenda') }}">
+    <span class="selo coral">{{ icone('agenda') }}</span>
+    <span class="rotulo">Consultas pendentes</span>
+    <strong data-total="agendados">{{ totais.agendados }}</strong>
+    <span class="meta">agendamentos futuros</span>
+  </a>
 </section>
 
 <div class="grade">
-  <section class="cartao">
-    <div class="cabecalho">
-      <h2>Próximos agendamentos</h2>
-      <a class="botao pequeno" href="{{ url_for('main.agendamento_novo') }}">Novo agendamento</a>
+  <section class="cartao" aria-labelledby="t-agenda">
+    <div class="cartao-topo">
+      <div class="cartao-titulo">
+        <span class="selo">{{ icone('agenda') }}</span>
+        <div><h2 id="t-agenda">Próximos atendimentos</h2><span class="meta">{{ agenda | length }} agendamento(s)</span></div>
+      </div>
+      <a class="botao pequeno" href="{{ url_for('main.agendamento_novo') }}">{{ icone('mais', 'p') }}Novo agendamento</a>
     </div>
     {% if agenda %}
-    <div class="tabela"><table>
-      <thead><tr><th>Quando</th><th>Animal</th><th>Veterinário</th></tr></thead>
+    <div class="tabela"><table class="responsiva">
+      <thead><tr><th>Data e hora</th><th>Animal</th><th>Tipo</th><th>Veterinário</th></tr></thead>
       <tbody>
       {% for ag in agenda %}
         <tr>
-          <td>{{ ag.data_hora | data_hora }}<br><span class="meta">{{ ag.tipo_atendimento }}</span></td>
-          <td><a href="{{ url_for('main.animal', id_animal=ag.id_animal) }}">{{ ag.animal }}</a><br><span class="meta">{{ ag.tutor }}</span></td>
-          <td>{{ ag.veterinario }}</td>
+          <td class="quando principal-celula">{{ ag.data_hora | data }}<span class="meta">{{ ag.data_hora | hora }}</span></td>
+          <td data-rotulo="Animal">
+            <div class="pessoa">{{ avatar(ag.especie) }}
+              <div><a href="{{ url_for('main.animal', id_animal=ag.id_animal) }}">{{ ag.animal }}</a><span class="meta">{{ ag.tutor }}</span></div>
+            </div>
+          </td>
+          <td data-rotulo="Tipo">{{ ag.tipo_atendimento }}</td>
+          <td data-rotulo="Veterinário">{{ ag.veterinario }}</td>
         </tr>
       {% endfor %}
       </tbody>
     </table></div>
-    {% else %}<p class="vazio">Nenhum agendamento pendente.</p>{% endif %}
+    {% else %}{{ vazio('Nenhum agendamento pendente.', 'agenda') }}{% endif %}
+    <div class="cartao-rodape">
+      <a class="link-seta" href="{{ url_for('main.agenda') }}">Ver todos os agendamentos {{ icone('seta', 'p') }}</a>
+    </div>
   </section>
 
-  <section class="cartao">
-    <div class="cabecalho">
-      <h2>Vacinas vencidas ou a vencer (30 dias)</h2>
-      <a class="botao pequeno secundario" href="{{ url_for('main.vacinas') }}">Registrar vacina</a>
+  <section class="cartao" aria-labelledby="t-vacinas">
+    <div class="cartao-topo">
+      <div class="cartao-titulo">
+        <span class="selo ambar">{{ icone('vacinas') }}</span>
+        <div><h2 id="t-vacinas">Vacinas: atenção necessária</h2><span class="meta">{{ alertas | length }} vencida(s) ou a vencer em 30 dias</span></div>
+      </div>
     </div>
     {% if alertas %}
-    <div class="tabela"><table>
+    <div class="tabela"><table class="responsiva">
       <thead><tr><th>Animal</th><th>Vacina</th><th>Situação</th></tr></thead>
       <tbody>
       {% for a in alertas %}
         <tr>
-          <td><a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.animal }}</a><br><span class="meta">{{ a.tutor }}</span></td>
-          <td>{{ a.vacina }}<br><span class="meta">reforço em {{ a.proxima_dose | data }}</span></td>
-          <td>{{ situacao_vacina(a.dias_restantes) }}</td>
+          <td class="principal-celula">
+            <div class="pessoa">{{ avatar(a.especie) }}
+              <div><a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.animal }}</a><span class="meta">{{ a.tutor }}</span></div>
+            </div>
+          </td>
+          <td data-rotulo="Vacina">{{ a.vacina }}<span class="meta bloco">reforço em {{ a.proxima_dose | data }}</span></td>
+          <td data-rotulo="Situação">{{ situacao_vacina(a.dias_restantes) }}</td>
         </tr>
       {% endfor %}
       </tbody>
     </table></div>
-    {% else %}<p class="vazio">Nenhuma vacina vencida ou próxima do vencimento.</p>{% endif %}
+    {% else %}{{ vazio('Nenhuma vacina vencida ou próxima do vencimento.', 'check') }}{% endif %}
+    <div class="cartao-rodape">
+      <a class="link-seta" href="{{ url_for('main.vacinas') }}">Ver todas as vacinas {{ icone('seta', 'p') }}</a>
+    </div>
   </section>
 </div>
 {% endblock %}

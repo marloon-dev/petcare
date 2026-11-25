@@ -1,38 +1,42 @@
 {% extends "base.html" %}
+{% from "_macros.html" import icone, obrig %}
 {% block titulo %}Novo agendamento{% endblock %}
 {% block conteudo %}
-<h1>Novo agendamento</h1>
-<p class="subtitulo">O sistema impede dois agendamentos do mesmo veterinário no mesmo horário.</p>
-<section class="cartao">
+<a class="migalha" href="{{ url_for('main.agenda') }}">{{ icone('voltar', 'p') }}Agenda</a>
+<div class="pagina-topo">
+  <div><h1>Novo agendamento</h1><p class="subtitulo">Campos com <span class="obrigatorio">*</span> são obrigatórios.</p></div>
+</div>
+<section class="cartao"><div class="cartao-corpo">
+  <p class="dica">{{ icone('info', 'p') }}<span>O sistema impede dois agendamentos do mesmo veterinário no mesmo horário.</span></p>
   <form class="formulario" method="post">
-    <label>Animal *
+    <label>Animal {{ obrig() }}
       <select name="id_animal" required>
         <option value="">Selecione</option>
         {% for a in animais %}
           <option value="{{ a.id_animal }}" {{ 'selected' if form.get('id_animal') | string == a.id_animal | string }}>{{ a.nome }} ({{ a.tutor }})</option>
         {% endfor %}
       </select></label>
-    <label>Veterinário *
+    <label>Veterinário {{ obrig() }}
       <select name="id_veterinario" required>
         <option value="">Selecione</option>
         {% for v in veterinarios %}
           <option value="{{ v.id_veterinario }}" {{ 'selected' if form.get('id_veterinario') | string == v.id_veterinario | string }}>{{ v.nome }} · {{ v.especialidade }}</option>
         {% endfor %}
       </select></label>
-    <label>Tipo *
+    <label>Tipo {{ obrig() }}
       <select name="tipo_atendimento" required>
         {% for t in tipos %}<option {{ 'selected' if form.get('tipo_atendimento') == t }}>{{ t }}</option>{% endfor %}
       </select></label>
-    <label>Data *
-      <input name="data" type="date" required value="{{ form.get('data', '') }}"></label>
-    <label>Horário *
+    <label>Data {{ obrig() }}
+      <input name="data" type="date" required min="{{ data_hoje.isoformat() }}" value="{{ form.get('data', '') }}"></label>
+    <label>Horário {{ obrig() }} <small>intervalos de 15 min</small>
       <input name="hora" type="time" required step="900" value="{{ form.get('hora', '') }}"></label>
     <label class="inteiro">Observações
-      <textarea name="observacoes">{{ form.get('observacoes', '') }}</textarea></label>
-    <div class="inteiro acoes">
-      <button type="submit">Agendar</button>
+      <textarea name="observacoes" placeholder="Motivo da consulta, recomendações ao tutor…">{{ form.get('observacoes', '') }}</textarea></label>
+    <div class="form-acoes">
+      <button type="submit">{{ icone('agenda', 'p') }}Agendar</button>
       <a class="botao secundario" href="{{ url_for('main.agenda') }}">Cancelar</a>
     </div>
   </form>
-</section>
+</div></section>
 {% endblock %}

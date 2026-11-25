@@ -1,33 +1,34 @@
 {% extends "base.html" %}
-{% from "_macros.html" import sexo %}
+{% from "_macros.html" import sexo, icone, avatar, vazio %}
 {% block titulo %}Animais{% endblock %}
 {% block conteudo %}
-<div class="cabecalho">
-  <div><h1>Animais</h1><p class="subtitulo">{{ animais | length }} encontrado(s)</p></div>
-  <div class="acoes">
-    <form class="busca" method="get">
-      <input type="search" name="q" value="{{ busca }}" placeholder="Nome do animal ou do tutor" aria-label="Buscar animal">
-      <button class="secundario" type="submit">Buscar</button>
-    </form>
-    <a class="botao" href="{{ url_for('main.animal_novo') }}">Novo animal</a>
-  </div>
+<div class="pagina-topo">
+  <div><h1>Animais</h1><p class="subtitulo">{{ animais | length }} animal(is) {{ 'encontrado(s)' if busca else 'cadastrado(s)' }}</p></div>
+  <a class="botao" href="{{ url_for('main.animal_novo') }}">{{ icone('mais', 'p') }}Novo animal</a>
 </div>
-<section class="cartao tabela">
+<section class="cartao">
+  <div class="cartao-topo">
+    <form class="busca" method="get" role="search">
+      <input type="search" name="q" value="{{ busca }}" placeholder="Filtrar por nome do animal ou do tutor" aria-label="Filtrar animais">
+      <button class="secundario" type="submit">{{ icone('busca', 'p') }}Filtrar</button>
+    </form>
+    {% if busca %}<a class="link-seta" href="{{ url_for('main.animais') }}">Limpar filtro</a>{% endif %}
+  </div>
   {% if animais %}
-  <table>
-    <thead><tr><th>Nome</th><th>Espécie / raça</th><th>Sexo</th><th>Nascimento</th><th>Tutor</th></tr></thead>
+  <div class="tabela"><table class="responsiva">
+    <thead><tr><th>Animal</th><th>Espécie / raça</th><th>Sexo</th><th>Idade</th><th>Tutor</th></tr></thead>
     <tbody>
     {% for a in animais %}
       <tr>
-        <td><a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.nome }}</a></td>
-        <td>{{ a.especie }} · {{ a.raca }}</td>
-        <td>{{ sexo(a.sexo) }}</td>
-        <td>{{ a.data_nascimento | data }}</td>
-        <td><a href="{{ url_for('main.tutor', id_tutor=a.id_tutor) }}">{{ a.tutor }}</a></td>
+        <td class="principal-celula"><div class="pessoa">{{ avatar(a.especie) }}<a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.nome }}</a></div></td>
+        <td data-rotulo="Espécie / raça">{{ a.especie }} · {{ a.raca }}</td>
+        <td data-rotulo="Sexo">{{ sexo(a.sexo) }}</td>
+        <td data-rotulo="Idade">{{ a.data_nascimento | idade }}</td>
+        <td data-rotulo="Tutor"><a href="{{ url_for('main.tutor', id_tutor=a.id_tutor) }}">{{ a.tutor }}</a></td>
       </tr>
     {% endfor %}
     </tbody>
-  </table>
-  {% else %}<p class="vazio">Nenhum animal encontrado.</p>{% endif %}
+  </table></div>
+  {% else %}{{ vazio('Nenhum animal encontrado.') }}{% endif %}
 </section>
 {% endblock %}

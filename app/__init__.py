@@ -29,6 +29,50 @@ def create_app(config=None):
         d = to_datetime(value)
         return d.strftime("%d/%m/%Y %H:%M") if d else "—"
 
+    @app.template_filter("kg")
+    def _kg(value):
+        return f"{float(value):.2f}".replace(".", ",") + " kg" if value is not None else "—"
+
+    @app.template_filter("hora")
+    def _hora(value):
+        d = to_datetime(value)
+        return d.strftime("%H:%M") if d else "—"
+
+    dias_semana = ["segunda-feira", "terça-feira", "quarta-feira", "quinta-feira",
+                   "sexta-feira", "sábado", "domingo"]
+    meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho",
+             "agosto", "setembro", "outubro", "novembro", "dezembro"]
+
+    @app.template_filter("data_extenso")
+    def _data_extenso(value):
+        d = to_date(value)
+        if not d:
+            return "—"
+        texto = f"{dias_semana[d.weekday()]}, {d.day} de {meses[d.month - 1]} de {d.year}"
+        return texto[0].upper() + texto[1:]
+
+    @app.template_filter("idade")
+    def _idade(value):
+        from .views import hoje
+
+        nascimento = to_date(value)
+        if not nascimento:
+            return "Idade desconhecida"
+        ref = hoje()
+        meses_total = (ref.year - nascimento.year) * 12 + ref.month - nascimento.month
+        if ref.day < nascimento.day:
+            meses_total -= 1
+        anos, resto = divmod(max(meses_total, 0), 12)
+        if anos:
+            return f"{anos} ano{'s' if anos > 1 else ''}"
+        return f"{resto} {'mês' if resto == 1 else 'meses'}"
+
+    @app.context_processor
+    def _contexto():
+        from .views import hoje
+
+        return {"data_hoje": hoje()}
+
     @app.template_filter("fone")
     def _fone(value):
         v = str(value or "")

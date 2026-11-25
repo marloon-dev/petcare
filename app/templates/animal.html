@@ -1,106 +1,129 @@
 {% extends "base.html" %}
-{% from "_macros.html" import situacao_vacina, sexo %}
+{% from "_macros.html" import situacao_vacina, sexo, icone, avatar, vazio %}
 {% block titulo %}{{ animal.nome }}{% endblock %}
 {% block conteudo %}
-<div class="cabecalho">
-  <div>
+<a class="migalha" href="{{ url_for('main.animais') }}">{{ icone('voltar', 'p') }}Animais</a>
+
+<section class="cartao perfil">
+  {{ avatar(animal.especie, 'g') }}
+  <div class="perfil-info">
     <h1>{{ animal.nome }}</h1>
-    <p class="subtitulo">{{ animal.especie }} · {{ animal.raca }} · tutor
-      <a href="{{ url_for('main.tutor', id_tutor=animal.id_tutor) }}">{{ animal.tutor }}</a></p>
+    <p class="subtitulo">Tutor: <a href="{{ url_for('main.tutor', id_tutor=animal.id_tutor) }}">{{ animal.tutor }}</a></p>
+    <div class="fichas">
+      <span class="etiqueta neutra">{{ animal.especie }} · {{ animal.raca }}</span>
+      <span class="etiqueta neutra">{{ sexo(animal.sexo) }}</span>
+      <span class="etiqueta neutra">{{ animal.data_nascimento | idade }}</span>
+      {% if peso %}<span class="etiqueta neutra">{{ peso.peso_aferido | kg }}</span>{% endif %}
+    </div>
   </div>
   <div class="acoes">
-    <a class="botao" href="{{ url_for('main.agendamento_novo', animal=animal.id_animal) }}">Agendar</a>
-    <a class="botao secundario" href="{{ url_for('main.vacinas', animal=animal.id_animal) }}">Registrar vacina</a>
+    <a class="botao" href="{{ url_for('main.agendamento_novo', animal=animal.id_animal) }}">{{ icone('agenda', 'p') }}Agendar</a>
+    <a class="botao secundario" href="{{ url_for('main.vacinas', animal=animal.id_animal) }}">{{ icone('vacinas', 'p') }}Registrar vacina</a>
   </div>
-</div>
+</section>
 
-<div class="grade">
-  <section class="cartao">
-    <h2>Dados</h2>
-    <dl class="dados">
-      <dt>Sexo</dt><dd>{{ sexo(animal.sexo) }}</dd>
-      <dt>Nascimento</dt><dd>{{ animal.data_nascimento | data }}</dd>
-      <dt>Peso atual</dt>
-      <dd>{% if peso %}{{ '%.2f' | format(peso.peso_aferido | float) }} kg
-          <span class="meta">(aferido em {{ peso.data_hora_inicio | data }})</span>
-          {% else %}—{% endif %}</dd>
-    </dl>
-  </section>
+<div class="grade-lateral">
+  <div>
+    <section class="cartao">
+      <div class="cartao-topo"><div class="cartao-titulo"><span class="selo">{{ icone('documento') }}</span><h2>Dados</h2></div></div>
+      <div class="cartao-corpo" style="padding-top:0">
+        <dl class="dados">
+          <div><dt>Sexo</dt><dd>{{ sexo(animal.sexo) }}</dd></div>
+          <div><dt>Nascimento</dt><dd>{{ animal.data_nascimento | data }}</dd></div>
+          <div><dt>Peso atual</dt>
+            <dd>{% if peso %}{{ peso.peso_aferido | kg }}
+                <span class="meta bloco">aferido em {{ peso.data_hora_inicio | data }}</span>
+                {% else %}—{% endif %}</dd></div>
+        </dl>
+      </div>
+    </section>
 
-  <section class="cartao tabela">
-    <h2>Agendamentos pendentes</h2>
-    {% if agendamentos %}
-    <table>
-      <tbody>
-      {% for ag in agendamentos %}
-        <tr>
-          <td>{{ ag.data_hora | data_hora }}<br><span class="meta">{{ ag.tipo_atendimento }} · {{ ag.veterinario }}</span></td>
-          <td class="acoes">
+    <section class="cartao">
+      <div class="cartao-topo"><div class="cartao-titulo"><span class="selo coral">{{ icone('agenda') }}</span><h2>Agendamentos pendentes</h2></div></div>
+      {% if agendamentos %}
+      <ul class="lista-simples">
+        {% for ag in agendamentos %}
+        <li><div class="cartao-corpo" style="padding:14px 24px">
+          <strong class="bloco">{{ ag.data_hora | data_hora }}</strong>
+          <span class="meta bloco">{{ ag.tipo_atendimento }} · {{ ag.veterinario }}</span>
+          <div class="acoes" style="margin-top:10px">
             <a class="botao pequeno" href="{{ url_for('main.atendimento_novo', id_agendamento=ag.id_agendamento) }}">Atender</a>
-            <form method="post" action="{{ url_for('main.agendamento_cancelar', id_agendamento=ag.id_agendamento) }}">
+            <form method="post" action="{{ url_for('main.agendamento_cancelar', id_agendamento=ag.id_agendamento) }}"
+                  onsubmit='return confirm({{ ("Cancelar o agendamento de " ~ animal.nome ~ " em " ~ (ag.data_hora | data_hora) ~ "?") | tojson }})'>
               <button class="perigo pequeno" type="submit">Cancelar</button>
             </form>
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-    {% else %}<p class="vazio">Nenhum agendamento pendente.</p>{% endif %}
-  </section>
-</div>
-
-<section class="cartao tabela">
-  <h2>Situação vacinal</h2>
-  {% if alertas %}
-  <table>
-    <thead><tr><th>Vacina</th><th>Última dose</th><th>Próximo reforço</th><th>Situação</th></tr></thead>
-    <tbody>
-    {% for a in alertas %}
-      <tr>
-        <td>{{ a.vacina }}</td>
-        <td>{{ a.data_aplicacao | data }}</td>
-        <td>{{ a.proxima_dose | data }}</td>
-        <td>{{ situacao_vacina(a.dias_restantes) }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-  {% else %}<p class="vazio">Nenhuma vacina registrada.</p>{% endif %}
-  {% if vacinas %}
-  <details>
-    <summary class="meta">Histórico completo de doses ({{ vacinas | length }})</summary>
-    <table>
-      <thead><tr><th>Data</th><th>Vacina</th><th>Lote</th><th>Veterinário</th></tr></thead>
-      <tbody>
-      {% for v in vacinas %}
-        <tr><td>{{ v.data_aplicacao | data }}</td><td>{{ v.vacina }}</td><td>{{ v.lote }}</td><td>{{ v.veterinario }}</td></tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </details>
-  {% endif %}
-</section>
-
-<section class="cartao">
-  <h2>Prontuário</h2>
-  {% for at in atendimentos %}
-    <article class="atendimento">
-      <p class="meta">{{ at.data_hora_inicio | data_hora }} · {{ at.tipo_atendimento }} · {{ at.veterinario }}
-        {% if at.peso_aferido %} · {{ '%.2f' | format(at.peso_aferido | float) }} kg{% endif %}</p>
-      <p><strong>Queixa:</strong> {{ at.queixa }}</p>
-      <p><strong>Diagnóstico:</strong> {{ at.diagnostico }}</p>
-      {% if at.tratamento %}<p><strong>Tratamento:</strong> {{ at.tratamento }}</p>{% endif %}
-      {% if at.prescricoes %}
-        <p><strong>Prescrições:</strong></p>
-        <ul>
-        {% for p in at.prescricoes %}
-          <li>{{ p.medicamento }} {{ p.dosagem }}: {{ p.frequencia }}, por {{ p.duracao_dias }} dia(s){% if p.orientacoes %}. <span class="meta">{{ p.orientacoes }}</span>{% endif %}</li>
+          </div>
+        </div></li>
         {% endfor %}
-        </ul>
+      </ul>
+      {% else %}{{ vazio('Nenhum agendamento pendente.', 'agenda') }}{% endif %}
+    </section>
+  </div>
+
+  <div>
+    <section class="cartao">
+      <div class="cartao-topo"><div class="cartao-titulo"><span class="selo ambar">{{ icone('vacinas') }}</span><h2>Situação vacinal</h2></div></div>
+      {% if alertas %}
+      <div class="tabela"><table class="responsiva">
+        <thead><tr><th>Vacina</th><th>Última dose</th><th>Próximo reforço</th><th>Situação</th></tr></thead>
+        <tbody>
+        {% for a in alertas %}
+          <tr>
+            <td class="principal-celula"><strong>{{ a.vacina }}</strong></td>
+            <td data-rotulo="Última dose">{{ a.data_aplicacao | data }}</td>
+            <td data-rotulo="Próximo reforço">{{ a.proxima_dose | data }}</td>
+            <td data-rotulo="Situação">{{ situacao_vacina(a.dias_restantes) }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table></div>
+      {% else %}{{ vazio('Nenhuma vacina registrada.', 'vacinas') }}{% endif %}
+      {% if vacinas %}
+      <details class="historico">
+        <summary>Histórico completo de doses ({{ vacinas | length }})</summary>
+        <div class="tabela"><table class="responsiva">
+          <thead><tr><th>Data</th><th>Vacina</th><th>Lote</th><th>Veterinário</th></tr></thead>
+          <tbody>
+          {% for v in vacinas %}
+            <tr><td class="principal-celula"><strong>{{ v.data_aplicacao | data }}</strong></td><td data-rotulo="Vacina">{{ v.vacina }}</td>
+                <td data-rotulo="Lote">{{ v.lote }}</td><td data-rotulo="Veterinário">{{ v.veterinario }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table></div>
+      </details>
       {% endif %}
-    </article>
-  {% else %}
-    <p class="vazio">Nenhum atendimento registrado.</p>
-  {% endfor %}
-</section>
+    </section>
+
+    <section class="cartao">
+      <div class="cartao-topo">
+        <div class="cartao-titulo"><span class="selo folha">{{ icone('veterinario') }}</span>
+          <div><h2>Prontuário</h2><span class="meta">{{ atendimentos | length }} atendimento(s)</span></div></div>
+      </div>
+      {% if atendimentos %}
+      <ol class="linha-tempo">
+        {% for at in atendimentos %}
+        <li><article class="registro">
+          <div class="registro-topo">
+            <strong>{{ at.data_hora_inicio | data_hora }}</strong>
+            <span class="etiqueta Agendado">{{ at.tipo_atendimento }}</span>
+            <span class="meta">{{ at.veterinario }}{% if at.peso_aferido %} · {{ at.peso_aferido | kg }}{% endif %}</span>
+          </div>
+          <p><span class="rotulo">Queixa:</span> {{ at.queixa }}</p>
+          <p><span class="rotulo">Diagnóstico:</span> {{ at.diagnostico }}</p>
+          {% if at.tratamento %}<p><span class="rotulo">Tratamento:</span> {{ at.tratamento }}</p>{% endif %}
+          {% if at.prescricoes %}
+          <ul class="receitas" aria-label="Prescrições">
+            {% for p in at.prescricoes %}
+            <li>{{ icone('remedio', 'p') }}<div><strong>{{ p.medicamento }} {{ p.dosagem }}</strong>
+              <span class="meta bloco">{{ p.frequencia }}, por {{ p.duracao_dias }} dia(s){% if p.orientacoes %}. {{ p.orientacoes }}{% endif %}</span></div></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </article></li>
+        {% endfor %}
+      </ol>
+      {% else %}{{ vazio('Nenhum atendimento registrado.', 'documento') }}{% endif %}
+    </section>
+  </div>
+</div>
 {% endblock %}

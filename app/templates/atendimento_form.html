@@ -1,25 +1,42 @@
 {% extends "base.html" %}
+{% from "_macros.html" import icone, avatar, obrig %}
 {% block titulo %}Atendimento{% endblock %}
 {% block conteudo %}
-<h1>Atendimento de {{ ag.animal }}</h1>
-<p class="subtitulo">{{ ag.especie }} · tutor {{ ag.tutor }} · {{ ag.tipo_atendimento }} agendado para
-  {{ ag.data_hora | data_hora }} com {{ ag.veterinario }}</p>
-<section class="cartao">
+<a class="migalha" href="{{ url_for('main.agenda') }}">{{ icone('voltar', 'p') }}Agenda</a>
+
+<section class="cartao perfil">
+  {{ avatar(ag.especie, 'g') }}
+  <div class="perfil-info">
+    <h1>Atendimento de {{ ag.animal }}</h1>
+    <p class="subtitulo">Tutor: {{ ag.tutor }}</p>
+    <div class="fichas">
+      <span class="etiqueta neutra">{{ ag.especie }}</span>
+      <span class="etiqueta Agendado">{{ ag.tipo_atendimento }}</span>
+      <span class="etiqueta neutra">{{ ag.data_hora | data_hora }}</span>
+      <span class="etiqueta neutra">{{ ag.veterinario }}</span>
+    </div>
+  </div>
+</section>
+
+<section class="cartao"><div class="cartao-corpo">
   <form class="formulario" method="post">
-    <label class="inteiro">Queixa principal *
-      <textarea name="queixa" required>{{ form.get('queixa', '') }}</textarea></label>
+    <p class="secao-form">Avaliação clínica</p>
+    <label class="inteiro">Queixa principal {{ obrig() }}
+      <textarea name="queixa" required placeholder="O que o tutor relatou?">{{ form.get('queixa', '') }}</textarea></label>
     <label>Peso aferido (kg)
       <input name="peso_aferido" inputmode="decimal" placeholder="ex.: 12,5" value="{{ form.get('peso_aferido', '') }}"></label>
-    <label class="inteiro">Diagnóstico *
+    <label class="inteiro">Diagnóstico {{ obrig() }}
       <textarea name="diagnostico" required>{{ form.get('diagnostico', '') }}</textarea></label>
     <label class="inteiro">Tratamento
       <textarea name="tratamento">{{ form.get('tratamento', '') }}</textarea></label>
     <label class="inteiro">Observações
       <textarea name="observacoes">{{ form.get('observacoes', '') }}</textarea></label>
 
+    <p class="secao-form">Prescrições <small style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--suave)">opcional, até 3</small></p>
     {% for i in range(1, 4) %}
-    <fieldset class="inteiro">
-      <legend>Prescrição {{ i }} <small>(opcional)</small></legend>
+    {% set preenchida = form.get('medicamento_' ~ i) or form.get('dosagem_' ~ i) or form.get('frequencia_' ~ i) or form.get('duracao_' ~ i) %}
+    <details class="prescricao" {% if i == 1 or preenchida %}open{% endif %}>
+      <summary>Prescrição {{ i }} <small>(opcional)</small></summary>
       <div class="formulario">
         <label>Medicamento <input name="medicamento_{{ i }}" maxlength="100" value="{{ form.get('medicamento_' ~ i, '') }}"></label>
         <label>Dosagem <input name="dosagem_{{ i }}" maxlength="50" placeholder="ex.: 20 mg" value="{{ form.get('dosagem_' ~ i, '') }}"></label>
@@ -27,13 +44,13 @@
         <label>Duração (dias) <input name="duracao_{{ i }}" type="number" min="1" value="{{ form.get('duracao_' ~ i, '') }}"></label>
         <label class="inteiro">Orientações <input name="orientacoes_{{ i }}" value="{{ form.get('orientacoes_' ~ i, '') }}"></label>
       </div>
-    </fieldset>
+    </details>
     {% endfor %}
 
-    <div class="inteiro acoes">
-      <button type="submit">Registrar atendimento</button>
+    <div class="form-acoes">
+      <button type="submit">{{ icone('check', 'p') }}Registrar atendimento</button>
       <a class="botao secundario" href="{{ url_for('main.animal', id_animal=ag.id_animal) }}">Voltar</a>
     </div>
   </form>
-</section>
+</div></section>
 {% endblock %}

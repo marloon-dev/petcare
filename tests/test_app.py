@@ -13,7 +13,7 @@ def texto(resposta):
     "/", "/tutores", "/tutores?q=maria", "/tutores/1", "/tutores/novo",
     "/animais", "/animais/4", "/animais/10", "/animais/novo",
     "/agenda", "/agenda?status=Todos", "/agenda?status=Cancelado", "/agenda/novo",
-    "/agenda/12/atender", "/vacinas",
+    "/agenda/12/atender", "/vacinas", "/busca", "/busca?q=thor",
 ])
 def test_telas_respondem(client, url):
     assert client.get(url).status_code == 200
@@ -29,7 +29,7 @@ def test_painel_mostra_totais_e_alertas(client):
     assert "Pipoca" in html and "Mixomatose" in html      # vacina vencida
     assert "Luna" in html                                 # V10 vencida
     assert "Remarcação da consulta cancelada" not in html  # o painel não mostra observações
-    assert ">4</strong><span>agendamentos pendentes" in html
+    assert 'data-total="agendados">4</strong>' in html
 
 
 def test_prontuario_mostra_historico_e_peso_atual(client):
@@ -37,7 +37,7 @@ def test_prontuario_mostra_historico_e_peso_atual(client):
     assert "Golden Retriever" in html and "Cão" in html   # espécie obtida pela raça
     assert "Dermatite alérgica" in html
     assert "Prednisolona" in html
-    assert "32.60 kg" in html                             # peso do atendimento mais recente
+    assert "32,60 kg" in html                             # peso do atendimento mais recente
 
 
 # ---------------------------------------------------------------------------
@@ -137,7 +137,7 @@ def test_registrar_atendimento_com_prescricao(client, consulta):
     assert float(at["peso_aferido"]) == 3.85
     prescricoes = consulta("SELECT * FROM prescricao WHERE id_atendimento = :id", id=at["id_atendimento"])
     assert len(prescricoes) == 1 and prescricoes[0]["duracao_dias"] == 15
-    assert "3.85 kg" in texto(client.get("/animais/5"))  # peso atual atualizado
+    assert "3,85 kg" in texto(client.get("/animais/5"))  # peso atual atualizado
 
 
 def test_atendimento_exige_campos_e_prescricao_completa(client, consulta):
@@ -166,7 +166,7 @@ def test_vacina_de_outra_especie_e_recusada(client, consulta):
 
 
 def test_reforco_registrado_remove_alerta(client):
-    linha_alerta = "<td>V4 (Quádrupla Felina)</td>"  # célula da tabela de alertas
+    linha_alerta = "<td data-rotulo=\"Vacina\">V4 (Quádrupla Felina)</td>"  # célula da tabela de alertas
     assert linha_alerta in texto(client.get("/vacinas"))  # Nino vence em 30/11
     resposta = client.post("/vacinas", data={
         "id_animal": "2", "id_vacina": "4", "id_veterinario": "1",
@@ -179,3 +179,34 @@ def test_dose_duplicada_e_recusada(client):
     dados = {"id_animal": "7", "id_vacina": "4", "id_veterinario": "4",
              "data_aplicacao": "2026-11-12", "lote": "ZT2610F"}  # já registrada na carga
     assert "já foi registrada" in texto(client.post("/vacinas", data=dados))
+
+
+# ---------------------------------------------------------------------------
+# Busca geral e interface
+# ---------------------------------------------------------------------------
+def test_busca_geral_encontra_tutor_e_animal(client):
+    html = texto(client.get("/busca?q=Maria"))
+    assert "Maria Oliveira" in html            # tutor pelo nome
+    assert "Luna" in html and "Nino" in html   # animais da tutora
+
+
+def test_busca_geral_por_cpf_com_pontuacao(client, consulta):
+    cpf = consulta("SELECT cpf FROM tutor WHERE id_tutor = 3")[0]["cpf"]
+    formatado = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+    assert "Fernanda Rocha" in texto(client.get("/busca", query_string={"q": formatado}))
+
+
+def test_busca_sem_resultado(client):
+    html = texto(client.get("/busca?q=zzzz"))
+    assert "Nenhum tutor encontrado" in html and "Nenhum animal encontrado" in html
+
+
+def test_idade_e_data_por_extenso(client):
+    html = texto(client.get("/animais/10"))   # Max: sem data de nascimento
+    assert "Idade desconhecida" in html
+    assert "Terça-feira, 24 de novembro de 2026" in texto(client.get("/"))
+
+
+def test_agenda_mostra_contagem_por_status(client):
+    html = texto(client.get("/agenda"))
+    assert 'aria-current="page"' in html and 'class="contagem">4<' in html

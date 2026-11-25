@@ -1,28 +1,32 @@
 {% extends "base.html" %}
+{% from "_macros.html" import icone, obrig %}
 {% block titulo %}Novo animal{% endblock %}
 {% block conteudo %}
-<h1>Novo animal</h1>
-<p class="subtitulo">A espécie é definida pela raça. Para animais sem raça definida, escolha "SRD" da espécie correta.</p>
-<section class="cartao">
+<a class="migalha" href="{{ url_for('main.animais') }}">{{ icone('voltar', 'p') }}Animais</a>
+<div class="pagina-topo">
+  <div><h1>Novo animal</h1><p class="subtitulo">Campos com <span class="obrigatorio">*</span> são obrigatórios.</p></div>
+</div>
+<section class="cartao"><div class="cartao-corpo">
+  <p class="dica">{{ icone('info', 'p') }}<span>A espécie é definida pela raça. Para animais sem raça definida, escolha “SRD” da espécie correta.</span></p>
   <form class="formulario" method="post">
-    <label>Nome *
+    <label>Nome {{ obrig() }}
       <input name="nome" required maxlength="60" value="{{ form.get('nome', '') }}"></label>
-    <label>Sexo *
+    <label>Sexo {{ obrig() }}
       <select name="sexo" required>
         <option value="">Selecione</option>
         <option value="M" {{ 'selected' if form.get('sexo') == 'M' }}>Macho</option>
         <option value="F" {{ 'selected' if form.get('sexo') == 'F' }}>Fêmea</option>
       </select></label>
-    <label>Data de nascimento <small>deixe em branco se desconhecida</small>
-      <input name="data_nascimento" type="date" value="{{ form.get('data_nascimento', '') }}"></label>
-    <label>Tutor *
+    <label>Data de nascimento <small>deixe em branco se não souber</small>
+      <input name="data_nascimento" type="date" max="{{ data_hoje.isoformat() }}" value="{{ form.get('data_nascimento', '') }}"></label>
+    <label>Tutor {{ obrig() }}
       <select name="id_tutor" required>
         <option value="">Selecione</option>
         {% for t in tutores %}
           <option value="{{ t.id_tutor }}" {{ 'selected' if form.get('id_tutor') | string == t.id_tutor | string }}>{{ t.nome }}</option>
         {% endfor %}
       </select></label>
-    <label>Raça *
+    <label>Raça {{ obrig() }}
       <select name="id_raca" required>
         <option value="">Selecione</option>
         {% for especie, grupo in racas | groupby('especie') %}
@@ -33,10 +37,10 @@
           </optgroup>
         {% endfor %}
       </select></label>
-    <div class="inteiro acoes">
-      <button type="submit">Salvar animal</button>
+    <div class="form-acoes">
+      <button type="submit">{{ icone('check', 'p') }}Salvar animal</button>
       <a class="botao secundario" href="{{ url_for('main.animais') }}">Cancelar</a>
     </div>
   </form>
-</section>
+</div></section>
 {% endblock %}

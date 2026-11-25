@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icone, iniciais, avatar, vazio %}
+{% block titulo %}Busca{% endblock %}
+{% block conteudo %}
+<div class="pagina-topo">
+  <div>
+    <h1>Busca</h1>
+    <p class="subtitulo">{% if termo %}Resultados para “{{ termo }}”{% else %}Digite o nome de um tutor, de um animal ou um CPF na barra de busca.{% endif %}</p>
+  </div>
+</div>
+{% if termo %}
+<div class="grade">
+  <section class="cartao">
+    <div class="cartao-topo"><div class="cartao-titulo"><span class="selo">{{ icone('tutores') }}</span>
+      <div><h2>Tutores</h2><span class="meta">{{ tutores | length }} resultado(s)</span></div></div></div>
+    {% if tutores %}
+    <ul class="lista-simples">
+      {% for t in tutores %}
+      <li><a href="{{ url_for('main.tutor', id_tutor=t.id_tutor) }}">{{ iniciais(t.nome) }}
+        <div><strong>{{ t.nome }}</strong><span class="meta bloco">CPF {{ t.cpf[:3] }}.{{ t.cpf[3:6] }}.{{ t.cpf[6:9] }}-{{ t.cpf[9:] }} · {{ t.cidade }}/{{ t.uf }} · {{ t.animais }} animal(is)</span></div></a></li>
+      {% endfor %}
+    </ul>
+    {% else %}{{ vazio('Nenhum tutor encontrado.', 'tutores') }}{% endif %}
+  </section>
+  <section class="cartao">
+    <div class="cartao-topo"><div class="cartao-titulo"><span class="selo folha">{{ icone('animais') }}</span>
+      <div><h2>Animais</h2><span class="meta">{{ animais | length }} resultado(s)</span></div></div></div>
+    {% if animais %}
+    <ul class="lista-simples">
+      {% for a in animais %}
+      <li><a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ avatar(a.especie) }}
+        <div><strong>{{ a.nome }}</strong><span class="meta bloco">{{ a.especie }} · {{ a.raca }} · tutor {{ a.tutor }}</span></div></a></li>
+      {% endfor %}
+    </ul>
+    {% else %}{{ vazio('Nenhum animal encontrado.') }}{% endif %}
+  </section>
+</div>
+{% endif %}
+{% endblock %}

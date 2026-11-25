@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block titulo %}Erro{% endblock %}
 {% block conteudo %}
-<section class="cartao">
-  <h1>Ops!</h1>
+<section class="cartao erro">
+  <img src="{{ url_for('static', filename='img/marca.png') }}" alt="">
+  <h1>Ops! Nada por aqui.</h1>
   <p>{{ mensagem }}</p>
-  <a class="botao" href="{{ url_for('main.painel') }}">Voltar ao painel</a>
+  <a class="botao" href="{{ url_for('main.painel') }}">Voltar para a visão geral</a>
 </section>
 {% endblock %}

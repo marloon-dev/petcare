@@ -1,44 +1,52 @@
 {% extends "base.html" %}
-{% from "_macros.html" import sexo %}
+{% from "_macros.html" import sexo, icone, iniciais, avatar, vazio %}
 {% block titulo %}{{ tutor.nome }}{% endblock %}
 {% block conteudo %}
-<div class="cabecalho">
-  <div><h1>{{ tutor.nome }}</h1><p class="subtitulo">Tutor</p></div>
-  <a class="botao" href="{{ url_for('main.animal_novo', tutor=tutor.id_tutor) }}">Cadastrar animal</a>
-</div>
+<a class="migalha" href="{{ url_for('main.tutores') }}">{{ icone('voltar', 'p') }}Tutores</a>
 
-<div class="grade">
+<section class="cartao perfil">
+  {{ iniciais(tutor.nome, 'g') }}
+  <div class="perfil-info">
+    <h1>{{ tutor.nome }}</h1>
+    <p class="subtitulo">Tutor de {{ animais | length }} animal(is) · {{ tutor.cidade }}/{{ tutor.uf }}</p>
+  </div>
+  <a class="botao" href="{{ url_for('main.animal_novo', tutor=tutor.id_tutor) }}">{{ icone('mais', 'p') }}Cadastrar animal</a>
+</section>
+
+<div class="grade-lateral">
   <section class="cartao">
-    <h2>Dados</h2>
-    <dl class="dados">
-      <dt>CPF</dt><dd>{{ tutor.cpf[:3] }}.{{ tutor.cpf[3:6] }}.{{ tutor.cpf[6:9] }}-{{ tutor.cpf[9:] }}</dd>
-      <dt>E-mail</dt><dd>{{ tutor.email or '—' }}</dd>
-      <dt>Endereço</dt>
-      <dd>{{ tutor.logradouro }}, {{ tutor.numero }}{{ ' – ' ~ tutor.complemento if tutor.complemento }}<br>
-          {{ tutor.bairro }} – {{ tutor.cidade }}/{{ tutor.uf }} – CEP {{ tutor.cep[:5] }}-{{ tutor.cep[5:] }}</dd>
-      {% for tel in telefones %}
-      <dt>{{ tel.tipo }}</dt><dd>{{ tel.numero | fone }}</dd>
-      {% endfor %}
-    </dl>
+    <div class="cartao-topo"><div class="cartao-titulo"><span class="selo">{{ icone('documento') }}</span><h2>Dados de contato</h2></div></div>
+    <div class="cartao-corpo" style="padding-top:0">
+      <dl class="dados">
+        <div><dt>{{ icone('documento', 'p') }}CPF</dt><dd>{{ tutor.cpf[:3] }}.{{ tutor.cpf[3:6] }}.{{ tutor.cpf[6:9] }}-{{ tutor.cpf[9:] }}</dd></div>
+        <div><dt>{{ icone('email', 'p') }}E-mail</dt><dd>{% if tutor.email %}<a href="mailto:{{ tutor.email }}">{{ tutor.email }}</a>{% else %}—{% endif %}</dd></div>
+        {% for tel in telefones %}
+        <div><dt>{{ icone('telefone', 'p') }}{{ tel.tipo }}</dt><dd><a href="tel:{{ tel.numero }}">{{ tel.numero | fone }}</a></dd></div>
+        {% endfor %}
+        <div><dt>{{ icone('local', 'p') }}Endereço</dt>
+          <dd>{{ tutor.logradouro }}, {{ tutor.numero }}{{ ' – ' ~ tutor.complemento if tutor.complemento }}<br>
+              {{ tutor.bairro }} – {{ tutor.cidade }}/{{ tutor.uf }}<br>CEP {{ tutor.cep[:5] }}-{{ tutor.cep[5:] }}</dd></div>
+      </dl>
+    </div>
   </section>
 
-  <section class="cartao tabela">
-    <h2>Animais</h2>
+  <section class="cartao">
+    <div class="cartao-topo"><div class="cartao-titulo"><span class="selo folha">{{ icone('animais') }}</span><h2>Animais</h2></div></div>
     {% if animais %}
-    <table>
-      <thead><tr><th>Nome</th><th>Espécie / raça</th><th>Sexo</th><th>Nascimento</th></tr></thead>
+    <div class="tabela"><table class="responsiva">
+      <thead><tr><th>Animal</th><th>Espécie / raça</th><th>Sexo</th><th>Idade</th></tr></thead>
       <tbody>
       {% for a in animais %}
         <tr>
-          <td><a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.nome }}</a></td>
-          <td>{{ a.especie }} · {{ a.raca }}</td>
-          <td>{{ sexo(a.sexo) }}</td>
-          <td>{{ a.data_nascimento | data }}</td>
+          <td class="principal-celula"><div class="pessoa">{{ avatar(a.especie) }}<a href="{{ url_for('main.animal', id_animal=a.id_animal) }}">{{ a.nome }}</a></div></td>
+          <td data-rotulo="Espécie / raça">{{ a.especie }} · {{ a.raca }}</td>
+          <td data-rotulo="Sexo">{{ sexo(a.sexo) }}</td>
+          <td data-rotulo="Idade">{{ a.data_nascimento | idade }}</td>
         </tr>
       {% endfor %}
       </tbody>
-    </table>
-    {% else %}<p class="vazio">Nenhum animal cadastrado.</p>{% endif %}
+    </table></div>
+    {% else %}{{ vazio('Nenhum animal cadastrado.') }}{% endif %}
   </section>
 </div>
 {% endblock %}
